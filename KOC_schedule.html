@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOC 社媒排期表</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0e17;
+  color: #c8d6e5;
+  font-family: -apple-system, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+.header {
+  background: linear-gradient(135deg, #0f1923, #1a1a2e);
+  border-bottom: 1px solid rgba(56,189,248,0.15);
+  padding: 36px 0 28px; margin-bottom: 28px;
+}
+.header .container { position: relative; }
+.header .badge {
+  display: inline-block; padding: 4px 12px; border-radius: 4px;
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  border: 1px solid rgba(56,189,248,0.3); color: #38bdf8;
+  margin-bottom: 12px; background: rgba(56,189,248,0.05);
+}
+.header h1 { font-size: 26px; font-weight: 800; color: #f1f5f9; }
+.header h1 span { color: #38bdf8; }
+.header p { font-size: 14px; color: #64748b; margin-top: 8px; }
+.header .note {
+  font-size: 12px; color: #475569; margin-top: 12px;
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+
+/* Week selector */
+.week-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.week-tab {
+  padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03); color: #94a3b8;
+  transition: all 0.15s;
+}
+.week-tab:hover { background: rgba(56,189,248,0.08); color: #7dd3fc; }
+.week-tab.active { background: rgba(56,189,248,0.12); color: #38bdf8; border-color: rgba(56,189,248,0.3); }
+
+/* Week view */
+.week-view { display: none; }
+.week-view.active { display: block; }
+
+.week-header {
+  display: grid; grid-template-columns: 1fr repeat(7, 1fr); gap: 6px;
+  margin-bottom: 8px;
+}
+.week-header div {
+  padding: 8px; text-align: center; font-size: 12px; font-weight: 600;
+  color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.02); border-radius: 6px;
+}
+.week-header .today { color: #38bdf8; border: 1px solid rgba(56,189,248,0.2); }
+
+/* Day columns */
+.week-grid {
+  display: grid; grid-template-columns: 1fr repeat(7, 1fr); gap: 6px;
+}
+.day-col { min-height: 180px; }
+.day-header {
+  padding: 8px; text-align: center; font-size: 12px; font-weight: 600;
+  border-radius: 6px 6px 0 0;
+  background: rgba(255,255,255,0.03); color: #64748b;
+  margin-bottom: 4px;
+}
+.day-header.today { background: rgba(56,189,248,0.1); color: #38bdf8; }
+.day-body {
+  background: rgba(255,255,255,0.02); border-radius: 0 0 6px 6px;
+  padding: 6px; min-height: 160px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Cards */
+.card {
+  padding: 8px 10px; border-radius: 6px; font-size: 12px;
+  margin-bottom: 6px; cursor: pointer; transition: all 0.15s;
+  border-left: 3px solid;
+}
+.card:hover { filter: brightness(1.2); transform: translateX(2px); }
+.card .time { font-size: 10px; color: #64748b; font-weight: 600; margin-bottom: 2px; }
+.card .title { font-weight: 600; color: #e2e8f0; }
+.card .desc { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+/* Card types */
+.card.koc-post { background: rgba(56,189,248,0.08); border-color: #38bdf8; }
+.card.koc-reward { background: rgba(34,197,94,0.08); border-color: #22c55e; }
+.card.koc-recruit { background: rgba(168,85,247,0.08); border-color: #a855f7; }
+.card.koc-event { background: rgba(234,179,8,0.08); border-color: #eab308; }
+.card.koc-submit { background: rgba(239,68,68,0.08); border-color: #ef4444; }
+
+/* Legend */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; padding: 14px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #94a3b8; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+.legend-dot.blue { background: #38bdf8; }
+.legend-dot.green { background: #22c55e; }
+.legend-dot.purple { background: #a855f7; }
+.legend-dot.yellow { background: #eab308; }
+.legend-dot.red { background: #ef4444; }
+
+/* Modal */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
+.modal.show { display: flex; }
+.modal-content {
+  background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 28px; max-width: 480px; width: 90%;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 12px; right: 16px; font-size: 20px; color: #64748b;
+  cursor: pointer; border: none; background: none;
+}
+.modal-close:hover { color: #e2e8f0; }
+.modal h3 { font-size: 18px; color: #f1f5f9; margin-bottom: 8px; }
+.modal .meta { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+.modal .detail { font-size: 14px; color: #94a3b8; line-height: 1.8; }
+.modal .tag-type {
+  display: inline-block; padding: 3px 10px; border-radius: 4px;
+  font-size: 11px; font-weight: 600; margin-bottom: 12px;
+}
+
+/* Add form button */
+.add-btn {
+  position: fixed; bottom: 30px; right: 30px;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: #fff; font-size: 26px; font-weight: 300;
+  border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(56,189,248,0.3);
+  transition: all 0.2s; z-index: 50;
+}
+.add-btn:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(56,189,248,0.4); }
+
+@media (max-width: 768px) {
+  .week-grid { font-size: 11px; }
+  .day-body { min-height: 120px; }
+  .card { font-size: 11px; padding: 6px 8px; }
+}
+
+/* Sticky time column */
+.time-col {
+  font-size: 12px; color: #64748b; padding: 8px 6px; text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <div class="badge">YOYO CREATIVE STUDIO · KOC</div>
+    <h1>📅 <span>KOC</span> 社媒排期表</h1>
+    <p>欧美 KOC 内容排期 · 发布计划 · 奖励节点 · 活动运营</p>
+    <div class="note">
+      <span>📌 绿色=奖励 &nbsp;·&nbsp; 蓝色=发帖 &nbsp;·&nbsp; 紫色=招募 &nbsp;·&nbsp; 黄色=活动 &nbsp;·&nbsp; 红色=截止</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot blue"></div> 内容发布</div>
+  <div class="legend-item"><div class="legend-dot green"></div> 奖励结算</div>
+  <div class="legend-item"><div class="legend-dot purple"></div> KOC 招募</div>
+  <div class="legend-item"><div class="legend-dot yellow"></div> 活动运营</div>
+  <div class="legend-item"><div class="legend-dot red"></div> 截止日期</div>
+</div>
+
+<!-- Week tabs -->
+<div class="week-tabs" id="weekTabs"></div>
+
+<!-- Week views -->
+<div id="weekViews"></div>
+
+<!-- Add button -->
+<button class="add-btn" onclick="openAddModal()">+</button>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal" id="addModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeAddModal()">✕</button>
+    <h3>✏️ 新增排期</h3>
+    <div style="margin-top:16px">
+      <div style="margin-bottom:12px">
+        <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:4px">周</label>
+        <select id="addWeek" style="width:100%;padding:10px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#e2e8f0;font-size:13px"></select>
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:4px">星期</label>
+        <select id="addDay" style="width:100%;padding:10px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#e2e8f0;font-size:13px">
+          <option value="0">周一</option><option value="1">周二</option><option value="2">周三</option>
+          <option value="3">周四</option><option value="4">周五</option><option value="5">周六</option><option value="6">周日</option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:4px">类型</label>
+        <select id="addType" style="width:100%;padding:10px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#e2e8f0;font-size:13px">
+          <option value="koc-post">📱 内容发布</option>
+          <option value="koc-reward">💰 奖励结算</option>
+          <option value="koc-recruit">🎯 KOC 招募</option>
+          <option value="koc-event">🎪 活动运营</option>
+          <option value="koc-submit">⛔ 截止日期</option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:4px">时间</label>
+        <input id="addTime" type="text" value="10:00" style="width:100%;padding:10px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#e2e8f0;font-size:13px" placeholder="10:00">
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:4px">标题</label>
+        <input id="addTitle" type="text" style="width:100%;padding:10px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#e2e8f0;font-size:13px" placeholder="如：FB 发布本周创作">
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:13px;color:#94a3b8;display:block;margin-bottom:4px">备注</label>
+        <textarea id="addDesc" style="width:100%;padding:10px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#94a3b8;font-size:13px;resize:vertical;min-height:60px" placeholder="发布内容、平台、话术提示..."></textarea>
+      </div>
+      <button onclick="saveSchedule()" style="width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,#38bdf8,#6366f1);color:#fff;font-size:14px;font-weight:600;cursor:pointer">保存</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ===== DATA =====
+var SCHEDULE = [
+  // --- 7月 W1 ---
+  { w:0, d:1, t:"10:00", type:"koc-post", title:"IG 发布本周创作", desc:"周六发 IG Reels，展示本周最佳设计" },
+  { w:0, d:5, t:"15:00", type:"koc-event", title:"KOC 本周数据统计截止", desc:"统计本周各平台数据，准备周报" },
+
+  // --- 7月 W2 (当前周) ---
+  { w:1, d:0, t:"10:00", type:"koc-post", title:"FB 发布周一内容", desc:"每周一 FB 固定发帖" },
+  { w:1, d:1, t:"14:00", type:"koc-post", title:"TikTok 发布短视频", desc:"发布 MLT 游戏短视频（Reels 风格）" },
+  { w:1, d:2, t:"10:00", type:"koc-post", title:"IG 图文贴", desc:"IG 发本周创作预告/灵感" },
+  { w:1, d:3, t:"15:00", type:"koc-submit", title:"UGC 作品提交截止", desc:"本周 KOC 作品提交 deadline" },
+  { w:1, d:4, t:"10:00", type:"koc-post", title:"FB 分享创作者作品", desc:"转发优秀 KOC 作品到 FB 主页" },
+  { w:1, d:5, t:"20:00", type:"koc-post", title:"周末 IG Reels", desc:"发布轻松向 Reels / 幕后花絮" },
+  { w:1, d:6, t:"10:00", type:"koc-reward", title:"上周奖励发放", desc:"结算上周奖励并私信通知 KOC" },
+
+  // --- 7月 W3 ---
+  { w:2, d:0, t:"10:00", type:"koc-post", title:"FB 发布周一内容", desc:"周一固定发帖" },
+  { w:2, d:2, t:"10:00", type:"koc-post", title:"IG 内容更新", desc:"IG 发帖" },
+  { w:2, d:3, t:"14:00", type:"koc-recruit", title:"KOC 招募帖", desc:"在各平台发布 KOC 招募" },
+  { w:2, d:4, t:"15:00", type:"koc-event", title:"半周年活动预告", desc:"配合半周年活动发 KOC 内容" },
+
+  // --- 7月 W4 ---
+  { w:3, d:0, t:"10:00", type:"koc-post", title:"FB 发布周一内容", desc:"周一固定发帖" },
+  { w:3, d:1, t:"14:00", type:"koc-post", title:"TikTok 发布", desc:"半周年主题短视频" },
+  { w:3, d:3, t:"10:00", type:"koc-post", title:"IG 半周年特辑", desc:"半周年活动 IG 内容" },
+  { w:3, d:5, t:"15:00", type:"koc-reward", title:"7 月奖励结算", desc:"统计全月数据，发放 7 月奖励" },
+];
+
+var TYPES = {
+  "koc-post": { label:"内容发布", icon:"📱" },
+  "koc-reward": { label:"奖励结算", icon:"💰" },
+  "koc-recruit": { label:"KOC 招募", icon:"🎯" },
+  "koc-event": { label:"活动运营", icon:"🎪" },
+  "koc-submit": { label:"截止日期", icon:"⛔" }
+};
+
+var WEEK_LABELS = ["7月 W1 (6/29-7/5)", "7月 W2 (7/6-7/12)", "7月 W3 (7/13-7/19)", "7月 W4 (7/20-7/26)"];
+var WEEK_STARTS = [
+  new Date(2026, 5, 29),
+  new Date(2026, 6, 6),
+  new Date(2026, 6, 13),
+  new Date(2026, 6, 20),
+];
+var DAY_NAMES = ["周一","周二","周三","周四","周五","周六","周日"];
+var TODAY = new Date();
+
+function dateStr(d) { return (d.getMonth()+1)+"/"+d.getDate(); }
+
+function render() {
+  var tabs = document.getElementById("weekTabs");
+  var views = document.getElementById("weekViews");
+  tabs.innerHTML = "";
+  views.innerHTML = "";
+
+  for (var wi = 0; wi < WEEK_LABELS.length; wi++) {
+    // Tab
+    var tab = document.createElement("div");
+    tab.className = "week-tab" + (wi === 0 ? " active" : "");
+    tab.textContent = WEEK_LABELS[wi];
+    tab.onclick = function(i) { return function() {
+      document.querySelectorAll(".week-tab").forEach(function(t){t.classList.remove("active");});
+      document.querySelectorAll(".week-view").forEach(function(v){v.classList.remove("active");});
+      document.querySelectorAll(".week-tab")[i].classList.add("active");
+      document.querySelectorAll(".week-view")[i].classList.add("active");
+    };}(wi);
+    tabs.appendChild(tab);
+
+    // Build week
+    var ws = WEEK_STARTS[wi];
+    var items = SCHEDULE.filter(function(s){ return s.w === wi; });
+
+    var dv = document.createElement("div");
+    dv.className = "week-view" + (wi === 0 ? " active" : "");
+
+    var html = '<div class="week-header"><div style="font-size:11px;color:#475569">时间</div>';
+    for (var d = 0; d < 7; d++) {
+      var dt = new Date(ws); dt.setDate(ws.getDate() + d);
+      var isToday = dt.toDateString() === TODAY.toDateString();
+      html += '<div' + (isToday ? ' class="today"' : '') + '>' + DAY_NAMES[d] + '<br><span style="font-weight:400;font-size:11px">' + dateStr(dt) + '</span></div>';
+    }
+    html += '</div><div class="week-grid">';
+    html += '<div class="time-col"></div>';
+    for (var d = 0; d < 7; d++) {
+      var dt = new Date(ws); dt.setDate(ws.getDate() + d);
+      var isToday = dt.toDateString() === TODAY.toDateString();
+      html += '<div class="day-col"><div class="day-header' + (isToday ? ' today' : '') + '">' + DAY_NAMES[d] + '<br>' + dateStr(dt) + '</div><div class="day-body">';
+      var dayItems = items.filter(function(s){ return s.d === d; });
+      dayItems.sort(function(a,b){ return a.t.localeCompare(b.t); });
+      dayItems.forEach(function(s){
+        var ti = TYPES[s.type] || {};
+        html += '<div class="card ' + s.type + '" onclick="showDetail(' + SCHEDULE.indexOf(s) + ')">';
+        html += '<div class="time">' + s.t + ' · ' + (ti.icon||'') + '</div>';
+        html += '<div class="title">' + s.title + '</div>';
+        if (s.desc) html += '<div class="desc">' + s.desc.substring(0, 30) + (s.desc.length > 30 ? '...' : '') + '</div>';
+        html += '</div>';
+      });
+      html += '</div></div>';
+    }
+    html += '</div>';
+    dv.innerHTML = html;
+    views.appendChild(dv);
+  }
+}
+
+function showDetail(idx) {
+  var s = SCHEDULE[idx];
+  if (!s) return;
+  var ti = TYPES[s.type] || {};
+  var wl = WEEK_LABELS[s.w] || "";
+  var wn = DAY_NAMES[s.d] || "";
+  var clsMap = {"koc-post":"blue","koc-reward":"green","koc-recruit":"purple","koc-event":"yellow","koc-submit":"red"};
+  var bgMap = {"koc-post":"rgba(56,189,248,0.12)","koc-reward":"rgba(34,197,94,0.12)","koc-recruit":"rgba(168,85,247,0.12)","koc-event":"rgba(234,179,8,0.12)","koc-submit":"rgba(239,68,68,0.12)"};
+  var borderMap = {"koc-post":"#38bdf8","koc-reward":"#22c55e","koc-recruit":"#a855f7","koc-event":"#eab308","koc-submit":"#ef4444"};
+  document.getElementById("modalBody").innerHTML =
+    '<span class="tag-type" style="background:'+(bgMap[s.type]||'')+';color:'+(borderMap[s.type]||'')+'">'+(ti.icon||'')+' '+(ti.label||'')+'</span>' +
+    '<h3>' + s.title + '</h3>' +
+    '<div class="meta">' + (wl||'') + ' · ' + (wn||'') + ' · ' + (s.t||'') + '</div>' +
+    '<div class="detail">' + (s.desc || '无备注') + '</div>';
+  document.getElementById("modal").classList.add("show");
+}
+
+function closeModal() { document.getElementById("modal").classList.remove("show"); }
+
+function openAddModal() {
+  var sel = document.getElementById("addWeek");
+  sel.innerHTML = "";
+  for (var i = 0; i < WEEK_LABELS.length; i++) {
+    var o = document.createElement("option");
+    o.value = i; o.textContent = WEEK_LABELS[i];
+    sel.appendChild(o);
+  }
+  document.getElementById("addModal").classList.add("show");
+}
+function closeAddModal() { document.getElementById("addModal").classList.remove("show"); }
+
+function saveSchedule() {
+  var w = parseInt(document.getElementById("addWeek").value);
+  var d = parseInt(document.getElementById("addDay").value);
+  var t = document.getElementById("addTime").value.trim() || "10:00";
+  var type = document.getElementById("addType").value;
+  var title = document.getElementById("addTitle").value.trim();
+  var desc = document.getElementById("addDesc").value.trim();
+  if (!title) { alert("请输入标题"); return; }
+  SCHEDULE.push({ w:w, d:d, t:t, type:type, title:title, desc:desc });
+  render();
+  closeAddModal();
+  document.getElementById("addTitle").value = "";
+  document.getElementById("addDesc").value = "";
+}
+
+render();
+</script>
+</body>
+</html>
