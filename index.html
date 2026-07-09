@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yoyo Creative Studio — KOC FAQ</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0e17;
+  color: #c8d6e5;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'JetBrains Mono', monospace, sans-serif;
+  line-height: 1.7;
+}
+.container { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+
+/* Header 科技感 */
+.header {
+  background: linear-gradient(135deg, #0f1923 0%, #1a1a2e 50%, #16213e 100%);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 48px 0 36px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(56,189,248,0.04) 0%, transparent 50%),
+              radial-gradient(circle at 70% 50%, rgba(168,85,247,0.04) 0%, transparent 50%);
+}
+.header .container { position: relative; z-index: 1; }
+.header .badge {
+  display: inline-block; padding: 4px 12px; border-radius: 4px;
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  border: 1px solid rgba(56,189,248,0.3); color: #38bdf8;
+  margin-bottom: 16px; background: rgba(56,189,248,0.05);
+}
+.header h1 {
+  font-size: 30px; font-weight: 800; color: #f1f5f9;
+  letter-spacing: -0.5px;
+}
+.header h1 span { color: #38bdf8; }
+.header p { font-size: 14px; color: #64748b; margin-top: 10px; }
+.header .meta {
+  font-size: 12px; color: #475569; margin-top: 14px;
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+.header .meta span {
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* Search */
+.search-wrap {
+  position: sticky; top: 0; z-index: 10;
+  padding: 16px 0; margin-bottom: 8px;
+}
+.search-wrap::before {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(10,14,23,0.92); backdrop-filter: blur(12px);
+}
+.search-wrap input {
+  position: relative; z-index: 1;
+  width: 100%; padding: 14px 18px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; font-size: 14px; color: #e2e8f0;
+  outline: none; transition: all 0.2s; font-family: inherit;
+}
+.search-wrap input:focus { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56,189,248,0.08); }
+.search-wrap input::placeholder { color: #475569; }
+
+/* TOC */
+.toc {
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+  padding: 20px 24px; margin-bottom: 28px;
+}
+.toc-title { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 2px; }
+.toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 3px; }
+.toc a {
+  display: block; padding: 7px 12px; border-radius: 6px;
+  font-size: 13px; color: #38bdf8; text-decoration: none;
+  transition: all 0.15s; font-weight: 500;
+}
+.toc a:hover { background: rgba(56,189,248,0.08); color: #7dd3fc; }
+
+/* Section card */
+.section {
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px; padding: 28px; margin-bottom: 20px;
+  position: relative; overflow: hidden;
+}
+.section::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(56,189,248,0.3), transparent);
+}
+.section-title {
+  font-size: 16px; font-weight: 700; color: #f1f5f9;
+  margin-bottom: 20px; padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* Q&A */
+.qa { margin-bottom: 14px; }
+.qa:last-child { margin-bottom: 0; }
+.q {
+  font-weight: 600; color: #e2e8f0; font-size: 14px;
+  padding: 12px 16px; background: rgba(255,255,255,0.03);
+  border-radius: 8px; cursor: pointer;
+  transition: all 0.15s;
+  border-left: 3px solid #38bdf8;
+  position: relative;
+}
+.q:hover { background: rgba(56,189,248,0.06); }
+.q::after {
+  content: '+'; position: absolute; right: 14px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px; color: #475569; font-weight: 300;
+  transition: transform 0.2s;
+}
+.q.open::after { content: '−'; }
+.a {
+  padding: 14px 16px 6px; font-size: 14px; color: #94a3b8;
+  line-height: 1.8; display: none;
+}
+.a.open { display: block; }
+.a p { margin-bottom: 8px; }
+.a ul { margin: 6px 0; padding-left: 20px; }
+.a li { margin-bottom: 4px; }
+.a strong { color: #e2e8f0; }
+.a code {
+  background: rgba(56,189,248,0.1); padding: 2px 8px; border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #7dd3fc;
+}
+
+/* Table */
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); }
+th { background: rgba(255,255,255,0.03); font-weight: 600; color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+td { color: #c8d6e5; }
+
+/* Tags */
+.tag {
+  display: inline-block; padding: 2px 10px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.tag-new { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+.tag-hot { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+
+/* Flow */
+.flow {
+  background: rgba(0,0,0,0.2); border-radius: 10px; padding: 20px;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  line-height: 2.2; color: #94a3b8; border: 1px solid rgba(255,255,255,0.04);
+  white-space: pre-wrap;
+}
+
+/* Footer */
+.footer {
+  text-align: center; padding: 32px 0 48px;
+  font-size: 12px; color: #334155; border-top: 1px solid rgba(255,255,255,0.03);
+  margin-top: 12px;
+}
+
+/* Result counter */
+.result-count {
+  font-size: 12px; color: #475569; padding: 8px 0 4px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header h1 { font-size: 22px; }
+  .section { padding: 20px; }
+  .toc-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <div class="badge">YOYO CREATIVE STUDIO · KOC FAQ</div>
+    <h1><span>✦</span> 常见问题手册</h1>
+    <p>客服团队专用 · 基于 #creators-exchange 实际问答整理</p>
+    <div class="meta">
+      <span>📅 2026-07-09</span>
+      <span>📊 1300 条消息分析</span>
+      <span>❓ 34 个 QA</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="🔍 搜索关键词  如：积分、提交、奖励、链接、Canva..." oninput="searchFAQ()">
+  <div class="result-count" id="resultCount"></div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">📋 导航</div>
+  <div class="toc-grid">
+    <a href="#sec1">一、入门与加入</a>
+    <a href="#sec2">二、内容创作要求</a>
+    <a href="#sec3">三、提交与审核</a>
+    <a href="#sec4">四、奖励与结算</a>
+    <a href="#sec5">五、连续创作奖励</a>
+    <a href="#sec6">六、链接与发布</a>
+    <a href="#sec7">七、Reddit</a>
+    <a href="#sec8">八、推荐奖励</a>
+    <a href="#sec9">九、社群规则</a>
+    <a href="#sec10">十、其他</a>
+    <a href="#flow">客服排查流程</a>
+  </div>
+</div>
+
+<div id="sec1" class="section">
+  <div class="section-title">📌 一、入门与加入</div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q1：Yoyo Creative Studio 是什么？</div><div class="a"><p>我们是欧美休闲游戏 <strong>My Leisure Time</strong> 的官方 KOC 创作者社群。通过创作 UGC 内容推广游戏，获得现金奖励和游戏福利。</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q2：谁能参加？</div><div class="a"><p>任何喜欢游戏的玩家都可以申请加入。目前主要面向欧美地区用户。</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q3：怎么加入？</div><div class="a"><p>1. Discord → #welcome → #introduce 自我介绍<br>2. 管理员审核后分配角色<br>3. 也可通过 referral 邀请朋友加入</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q4：有最低产出要求吗？</div><div class="a"><p>无强制踢出。连续 2 周无产出可能移出 KOC 角色。<br><code>📌 实际问：Is there a min points to have or we get kicked out?</code> → 目前无硬性门槛</p></div></div>
+</div>
+
+<div id="sec2" class="section">
+  <div class="section-title">📝 二、内容创作要求</div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q5：要做什么类型的内容？</div><div class="a">
+    <table>
+      <tr><th>平台</th><th>形式</th><th>要求</th></tr>
+      <tr><td>Instagram</td><td>图文 / Reels</td><td>公开账号</td></tr>
+      <tr><td>Facebook</td><td>图文 / 视频</td><td>主页或群组均可</td></tr>
+      <tr><td>TikTok</td><td>短视频</td><td>公开账号</td></tr>
+      <tr><td>Reddit <span class="tag tag-new">新增</span></td><td>图文</td><td>2026年7月起计入</td></tr>
+    </table>
+  </div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q6：内容有什么红线？</div><div class="a">
+    <p>✅ 原创 · 清晰展示游戏画面 · 英文 · 指定 hashtag</p>
+    <p>❌ 禁止 AI 生成（Canva 魔法橡皮擦会被标记）</p>
+    <p>❌ 不能说 "paid promotion" 类敏感词</p>
+    <p><code>📌 频道多次讨论 AI 问题：are AI filters allowed? — No</code></p>
+  </div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q7：一个作品能发多个平台吗？</div><div class="a"><p>✅ 同内容发不同平台 → 独立作品</p><p>❌ 同平台重复发 → 只计表现最好的一次</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q8：可以宣传自己的 IG 账号吗？</div><div class="a"><p>可以分享，建议以 MLT 游戏内容为主。</p></div></div>
+</div>
+
+<div id="sec3" class="section">
+  <div class="section-title">📮 三、提交与审核</div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q9：内容发布后要做什么？</div><div class="a"><p>把链接发到 <strong>#🎨｜creators-exchange</strong><br><code>IG | https://instagram.com/p/xxx | Reels</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q10：审核多久？</div><div class="a"><p>通常 24-48h，高峰期可能 1 周。<br><code>📌 one of mine took a week to get approved</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q11：审核不通过的原因？</div><div class="a"><p>❌ 链接打不开 · 图片不清晰 · 无关 MLT · AI 内容 · 重复发图</p></div></div>
+</div>
+
+<div id="sec4" class="section">
+  <div class="section-title">💰 四、奖励与结算 <span class="tag tag-hot">高频</span></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q13：积分怎么算？</div><div class="a"><p>TikTok → 播放量 &nbsp;|&nbsp; IG → 点赞+评论 &nbsp;|&nbsp; FB → 点赞+评论+分享 &nbsp;|&nbsp; Reddit → 互动量</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q14：月均积分多少算正常？</div><div class="a"><p>一般 0-10 分，高产 20+ 分。<br><code>📌 Is 9 points a lot? — It's decent!</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q15：积分上限？</div><div class="a"><p>每月 <strong>40 分</strong> 上限，月初重置。<br><code>📌 40 pts per month or total? — Monthly cap</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q16：礼品卡还是钻石？</div><div class="a">
+    <table>
+      <tr><th>选项</th><th>分值</th></tr>
+      <tr><td>$10 Google Play 礼品卡</td><td>2 分 ✅ 推荐</td></tr>
+      <tr><td>450 钻石</td><td>2 分（$0.01/钻，游戏内使用）</td></tr>
+      <tr><td>Amazon 礼品卡</td><td>分值不等</td></tr>
+    </table>
+    <p><code>📌 "I have no idea how to use diamonds" → 优先推荐礼品卡</code></p>
+  </div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q17：每月兑换次数？</div><div class="a"><p>每月 <strong>1 次</strong>。<br><code>📌 Only one redemption per month? — Yes</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q18：剩余积分下月还在吗？</div><div class="a"><p><strong>在的</strong>，兑换后剩余积分保留。<br><code>📌 Points stay for next time? — Yes</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q19：什么时候发奖励？</div><div class="a"><p>上月数据：次月第 1 周统计 &nbsp;→&nbsp; 第 2-3 周发放</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q20：最低兑多少？</div><div class="a"><p><strong>2 分</strong> 起兑（$10 礼品卡或 450 钻石）。</p></div></div>
+</div>
+
+<div id="sec5" class="section">
+  <div class="section-title">🏆 五、连续创作奖励 <span class="tag tag-new">新增</span></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q21：连续 5 天发布</div><div class="a"><p>• 月内 <strong>5 个不同日子</strong> 各 ≥1 条<br>• ✅ 可跨平台（FB→TikTok→IG）<br>• ✅ 不须连续（月内任意 5 天）<br><code>📌 Does 5 days have to be same platform? — No</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q22：15 条/月连续创作奖</div><div class="a"><p>• 月发 15+ 条可得额外奖励<br>• ✅ 不需要每条都有积分<br><code>📌 Do posts have to qualify for points? — No</code></p></div></div>
+</div>
+
+<div id="sec6" class="section">
+  <div class="section-title">🔗 六、链接与发布</div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q23：必须发在个人主页？</div><div class="a"><p>FB 可发 <strong>个人主页或群组</strong>。<br><code>📌 Can FB posts be on the group? — Either is fine</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q24：链接打不开？</div><div class="a"><p>账号私密→公开 &nbsp;·&nbsp; 链接不完整→重复制 &nbsp;·&nbsp; 已删→重发</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q25：同内容重复发怎么算？</div><div class="a"><p>同平台重发 → 只计最好那次 &nbsp;·&nbsp; 跨平台 → 各算各的</p></div></div>
+</div>
+
+<div id="sec7" class="section">
+  <div class="section-title">🆕 七、Reddit</div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q26：Reddit 计入积分？</div><div class="a"><p>2026年7月起计入，仅限 7 月后发帖。<br><code>📌 Does Reddit only count for July? — Yes</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q27：发什么内容？</div><div class="a"><p>MLT 游戏内容、设计展示、体验分享，需发在公开社区。</p></div></div>
+</div>
+
+<div id="sec8" class="section">
+  <div class="section-title">🎁 八、推荐奖励</div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q28：推荐朋友加入有奖励吗？</div><div class="a"><p>✅ 推荐积分 <strong>不计入 40 分上限</strong>，是额外奖励<br>✅ 朋友完成审核后生效</p></div></div>
+</div>
+
+<div id="sec9" class="section">
+  <div class="section-title">📋 九、社群规则</div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q29：Discord 能发什么？</div><div class="a"><p>✅ 作品分享 · 创作交流 · 游戏讨论 &nbsp;|&nbsp; ❌ 广告 · 刷屏 · 人身攻击</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q30：有问题找谁？</div><div class="a"><p>审核 → #creators-exchange &nbsp;·&nbsp; 结算 → 私信管理员 &nbsp;·&nbsp; 技术 → #support</p></div></div>
+</div>
+
+<div id="sec10" class="section">
+  <div class="section-title">❓ 十、其他</div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q31：加入前的帖子算不算？</div><div class="a"><p>加入 <strong>之后</strong> 发布的才算<br><code>📌 Do my previous posts not count? — Only after joining</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q32：新手有额外奖励吗？</div><div class="a"><p>首月可能有新手积分。查看最新公告或联系管理员。</p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q33：Canva 导出不清晰？</div><div class="a"><p>选最高画质导出 · 检查原始图片分辨率 · 避免 AI 功能<br><code>📌 Pictures lose quality on Canva, how to avoid?</code></p></div></div>
+  <div class="qa"><div class="q" onclick="toggle(this)">Q34：怎么录游戏视频？</div><div class="a"><p>手机自带录屏 · ibisPaint 手动编辑 · 不要依赖 AI 工具<br><code>📌 The screen recorder is seriously lacking — use phone's built-in recorder</code></p></div></div>
+</div>
+
+<div id="flow" class="section">
+  <div class="section-title">🤖 客服自助排查流程</div>
+  <div class="flow">收到 KOC 提问 →
+├── 入门类（Q1-Q4）→ 直接回复
+├── 创作类（Q5-Q8）→ 检查内容格式
+├── 提交类（Q9-Q12）→ 检查链接 + 确认审核周期
+├── 积分/奖励（Q13-Q20）→ 查结算周期 + 剩余积分
+├── 连续奖励（Q21-Q22）→ 确认发帖天数/数量
+├── 链接问题（Q23-Q25）→ 确认账号公开 + 链接完整
+├── Reddit（Q26-Q27）→ 确认是 7 月后发布
+├── 推荐奖励（Q28）→ 确认朋友已完成审核
+└── 其他/不在此范围 → 转运营负责人</div>
+</div>
+
+<div class="footer">
+  Yoyo Creative Studio · 运营团队 &nbsp;|&nbsp; 数据来源：#creators-exchange 6/29~7/9 &nbsp;|&nbsp; 2026-07-09
+</div>
+
+</div>
+
+<script>
+function toggle(el) {
+  el.classList.toggle('open');
+  var a = el.nextElementSibling;
+  if (a) a.classList.toggle('open');
+}
+
+function searchFAQ() {
+  var q = document.getElementById('searchInput').value.toLowerCase().trim();
+  var sections = document.querySelectorAll('.section');
+  var totalVisible = 0;
+
+  sections.forEach(function(sec) {
+    var qas = sec.querySelectorAll('.qa');
+    var visibleCount = 0;
+
+    qas.forEach(function(qa) {
+      var text = qa.textContent.toLowerCase();
+      if (!q || text.includes(q)) {
+        qa.style.display = '';
+        visibleCount++;
+      } else {
+        qa.style.display = 'none';
+      }
+    });
+
+    sec.style.display = visibleCount > 0 || !q ? '' : 'none';
+    totalVisible += visibleCount;
+  });
+
+  document.getElementById('resultCount').textContent = q ? '搜索到 ' + totalVisible + ' 条相关问题' : '';
+  var toc = document.querySelector('.toc');
+  toc.style.display = q ? 'none' : '';
+}
+</script>
+</body>
+</html>
