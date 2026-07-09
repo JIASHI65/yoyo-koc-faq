@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社媒排期 · 水平月历</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0a0e17; color:#e2e8f0;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  overflow-x:hidden;
+}
+.container { max-width:1400px; margin:0 auto; padding:16px 20px; }
+
+/* Header */
+.header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:16px; flex-wrap:wrap; gap:10px;
+}
+.header h1 { font-size:20px; font-weight:700; }
+.header h1 span { color:#38bdf8; }
+.header-left { display:flex; align-items:center; gap:12px; }
+.header-right { display:flex; gap:8px; align-items:center; }
+
+.month-nav { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.03); padding:6px 14px; border-radius:8px; }
+.month-nav button { width:30px; height:30px; border-radius:6px; border:none; background:rgba(255,255,255,0.06); color:#e2e8f0; font-size:16px; cursor:pointer; }
+.month-nav button:hover { background:rgba(56,189,248,0.2); }
+.month-nav .ml { font-size:15px; font-weight:700; color:#f1f5f9; min-width:100px; text-align:center; }
+
+.filters { display:flex; gap:6px; }
+.filters button {
+  padding:5px 12px; border-radius:6px; font-size:12px; font-weight:600;
+  cursor:pointer; border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03); color:#94a3b8;
+}
+.filters button.active { background:rgba(56,189,248,0.12); color:#38bdf8; border-color:rgba(56,189,248,0.3); }
+.filters button:hover { background:rgba(56,189,248,0.08); }
+
+/* Legend */
+.legend { display:flex; gap:14px; margin-bottom:12px; padding:8px 14px; background:rgba(255,255,255,0.02); border-radius:7px; border:1px solid rgba(255,255,255,0.04); align-items:center; font-size:12px; }
+.legend-item { display:flex; align-items:center; gap:5px; color:#94a3b8; }
+.legend-dot { width:10px; height:4px; border-radius:2px; }
+.legend-dot.blue { background:#38bdf8; }
+.legend-dot.purple { background:#a855f7; }
+
+/* Scrollable table wrapper */
+.table-wrap { overflow-x:auto; border:1px solid rgba(255,255,255,0.06); border-radius:10px; background:rgba(255,255,255,0.01); }
+
+table { border-collapse:collapse; font-size:12px; min-width:100%; }
+th, td { border:1px solid rgba(255,255,255,0.04); padding:0; }
+
+/* First column (account names) */
+.col-acc { position:sticky; left:0; z-index:3; }
+th.col-acc { background:#0f1923; min-width:70px; padding:8px 10px; text-align:left; font-size:11px; color:#64748b; font-weight:600; }
+td.col-acc { background:#0f1923; min-width:70px; padding:6px 10px; font-weight:600; font-size:12px; }
+
+/* Day headers */
+th.day-h { 
+  min-width:40px; padding:6px 4px; text-align:center;
+  background:rgba(255,255,255,0.02); font-size:10px; color:#64748b; font-weight:600; line-height:1.3;
+}
+th.day-h .dow { font-size:10px; }
+th.day-h .date { font-size:11px; color:#94a3b8; }
+th.day-h.today { background:rgba(56,189,248,0.08); }
+th.day-h.today .date { color:#38bdf8; }
+th.day-h.weekend { color:#475569; }
+
+/* Section header */
+td.section-h {
+  background:rgba(255,255,255,0.03); padding:5px 10px; font-size:11px;
+  font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:1px;
+}
+
+/* Day cells */
+td.day-cell { min-width:40px; height:32px; cursor:pointer; position:relative; transition:0.1s; vertical-align:top; padding:2px; }
+td.day-cell:hover { background:rgba(56,189,248,0.06); }
+td.day-cell.today { background:rgba(56,189,248,0.04); }
+
+/* Content badges in cells */
+.badge {
+  display:inline-flex; align-items:center; gap:2px;
+  padding:1px 5px; border-radius:3px; font-size:9px; font-weight:600;
+  cursor:pointer; white-space:nowrap; max-width:100%;
+  line-height:1.6; margin:0 1px;
+}
+.badge:hover { filter:brightness(1.2); }
+.badge.official { background:rgba(56,189,248,0.12); color:#7dd3fc; }
+.badge.undercover { background:rgba(168,85,247,0.12); color:#c084fc; }
+.badge .ty { font-size:8px; opacity:0.7; }
+.badge.more { background:rgba(255,255,255,0.06); color:#475569; font-size:8px; }
+
+/* Modal */
+.modal {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6);
+  z-index:100; align-items:center; justify-content:center;
+}
+.modal.show { display:flex; }
+.modal-inner {
+  background:#1a1a2e; border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px; padding:24px; max-width:500px; width:92%; max-height:90vh; overflow-y:auto;
+}
+.modal-close { float:right; font-size:18px; color:#64748b; cursor:pointer; background:none; border:none; }
+.modal-close:hover { color:#e2e8f0; }
+.modal h3 { font-size:16px; color:#f1f5f9; margin-bottom:14px; }
+
+.form-row { margin-bottom:10px; }
+.form-row label { display:block; font-size:11px; color:#94a3b8; margin-bottom:3px; font-weight:500; }
+.form-row input,.form-row select,.form-row textarea {
+  width:100%; padding:8px 10px; border-radius:5px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.04); color:#e2e8f0; font-size:13px; outline:none;
+}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus { border-color:#38bdf8; }
+.form-row textarea { resize:vertical; min-height:40px; }
+.form-row .row2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+.form-actions { display:flex; gap:8px; margin-top:14px; }
+.btn {
+  padding:8px 16px; border-radius:6px; font-size:12px; font-weight:600;
+  cursor:pointer; border:none; flex:1;
+}
+.btn-primary { background:linear-gradient(135deg,#38bdf8,#6366f1); color:#fff; }
+.btn-primary:hover { filter:brightness(1.1); }
+.btn-danger { background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid rgba(239,68,68,0.2); }
+
+/* Stats */
+.stat-bar {
+  display:flex; gap:12px; margin-bottom:10px; padding:6px 14px;
+  background:rgba(255,255,255,0.02); border-radius:7px; border:1px solid rgba(255,255,255,0.04);
+  font-size:11px; color:#64748b;
+}
+.stat-bar strong { color:#e2e8f0; font-size:13px; }
+
+/* Account mgr */
+.acc-mgr { padding:10px 14px; background:rgba(255,255,255,0.02); border-radius:7px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.04); }
+.acc-mgr-h { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.acc-mgr-h span { font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; }
+.acc-tag {
+  display:inline-flex; align-items:center; gap:3px;
+  padding:3px 8px; border-radius:3px; font-size:10px; font-weight:600;
+  margin:1px 3px 1px 0;
+}
+.acc-tag.official { background:rgba(56,189,248,0.1); color:#7dd3fc; }
+.acc-tag.undercover { background:rgba(168,85,247,0.1); color:#c084fc; }
+.acc-tag .del { cursor:pointer; opacity:0.4; }
+.acc-tag .del:hover { opacity:1; }
+
+@media (max-width:600px) {
+  th.day-h { min-width:32px; font-size:9px; padding:4px 2px; }
+  td.day-cell { min-width:32px; height:28px; }
+  .badge { font-size:8px; padding:1px 3px; }
+}
+/* Export button */
+.btn-export { padding:5px 12px; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer; border:1px solid rgba(56,189,248,0.2); background:rgba(56,189,248,0.08); color:#38bdf8; }
+.btn-export:hover { background:rgba(56,189,248,0.15); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <h1>📅 社媒排期 · <span>水平月历</span></h1>
+  </div>
+  <div class="header-right">
+    <button class="btn-export" onclick="exportCSV()">📤 导出CSV</button>
+    <div class="filters">
+      <button class="active" onclick="setFilter('all')">全部</button>
+      <button onclick="setFilter('official')">官号</button>
+      <button onclick="setFilter('undercover')">水下号</button>
+    </div>
+    <div class="month-nav">
+      <button onclick="prevMonth()">‹</button>
+      <span class="ml" id="monthLabel">2026年7月</span>
+      <button onclick="nextMonth()">›</button>
+    </div>
+  </div>
+</div>
+
+<div class="stat-bar" id="statBar"></div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot blue"></div> 官号</div>
+  <div class="legend-item"><div class="legend-dot purple"></div> 水下号</div>
+  <button class="btn-export" onclick="addAccount()" style="margin-left:auto">+ 账号</button>
+</div>
+
+<!-- Account list -->
+<div id="accList" style="margin-bottom:10px"></div>
+
+<!-- Calendar table -->
+<div class="table-wrap">
+  <table id="calTable"></table>
+</div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-inner">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+var STATE = { year:2026, month:6, accounts:[], entries:[], filter:'all', editDate:'', editAcc:'' };
+var MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+var DAYS = ['日','一','二','三','四','五','六'];
+var TODAY = new Date();
+
+var DEFAULTS = [
+  {name:'FB官号', type:'official'},
+  {name:'IG官号', type:'official'},
+  {name:'TikTok官号', type:'official'},
+  {name:'水下号1', type:'undercover'},
+  {name:'水下号2', type:'undercover'},
+];
+
+function load() {
+  try { var d=JSON.parse(localStorage.getItem('hc_state')); if(d){STATE.accounts=d.accounts||[];STATE.entries=d.entries||[];} }catch(e){}
+  if(!STATE.accounts.length) STATE.accounts=JSON.parse(JSON.stringify(DEFAULTS));
+}
+function save() {
+  try { localStorage.setItem('hc_state',JSON.stringify({accounts:STATE.accounts,entries:STATE.entries})); }catch(e){}
+}
+
+function pad(n){return n<10?'0'+n:''+n}
+function fmtDate(d){return STATE.year+'-'+pad(STATE.month+1)+'-'+pad(d)}
+function getDays(){return new Date(STATE.year,STATE.month+1,0).getDate()}
+
+function render() {
+  document.getElementById('monthLabel').textContent = STATE.year+'年'+MONTHS[STATE.month];
+  var days = getDays();
+  var accounts = STATE.filter==='all' ? STATE.accounts : STATE.accounts.filter(function(a){return a.type===STATE.filter;});
+  
+  // Group entries by date+account
+  var grid = {};
+  STATE.entries.forEach(function(e){
+    if(STATE.filter!=='all'){
+      var a=STATE.accounts.find(function(x){return x.name===e.account;});
+      if(!a||a.type!==STATE.filter) return;
+    }
+    var k = e.date + '|' + e.account;
+    if(!grid[k]) grid[k]=[];
+    grid[k].push(e);
+  });
+
+  var h = '<thead><tr>';
+  h += '<th class="col-acc" style="position:sticky;left:0;z-index:3">账号</th>';
+  for(var d=1;d<=days;d++){
+    var dt = new Date(STATE.year,STATE.month,d);
+    var dow = DAYS[dt.getDay()];
+    var isToday = STATE.year===TODAY.getFullYear() && STATE.month===TODAY.getMonth() && d===TODAY.getDate();
+    var isWeekend = dow==='六'||dow==='日';
+    h += '<th class="day-h'+(isToday?' today':'')+(isWeekend?' weekend':'')+'">';
+    h += '<div class="dow">' + dow + '</div>';
+    h += '<div class="date">' + (STATE.month+1)+'/'+d + '</div></th>';
+  }
+  h += '</tr></thead><tbody>';
+
+  var lastType = '';
+  accounts.forEach(function(acc, ai){
+    if(acc.type !== lastType){
+      h += '<tr><td class="section-h col-acc" colspan="'+(days+1)+'">'+(acc.type==='official'?'📌 官号':'🌊 水下号')+'</td></tr>';
+      lastType = acc.type;
+    }
+    h += '<tr><td class="col-acc">'+acc.name+'</td>';
+    for(var d=1;d<=days;d++){
+      var ds = fmtDate(d);
+      var k = ds+'|'+acc.name;
+      var items = grid[k] || [];
+      var dt = new Date(STATE.year,STATE.month,d);
+      var isToday = STATE.year===TODAY.getFullYear() && STATE.month===TODAY.getMonth() && d===TODAY.getDate();
+      h += '<td class="day-cell'+(isToday?' today':'')+'" onclick="openAdd(\''+ds+'\',\''+acc.name+'\')">';
+      items.sort(function(a,b){return (a.time||'00:00').localeCompare(b.time||'00:00');});
+      var shown = items.slice(0,2);
+      var more = items.length - 2;
+      shown.forEach(function(e){
+        h += '<span class="badge '+(acc.type)+'" onclick="event.stopPropagation();openEdit(\''+encodeURI(e.date+'|'+e.account+'|'+e.title)+'\')">';
+        h += '<span class="ty">'+(e.platform?.substring(0,2)||'')+'</span> '+ (e.title?.substring(0,6)||'');
+        h += '</span>';
+      });
+      if(more>0) h += '<span class="badge more">+'+more+'</span>';
+      h += '</td>';
+    }
+    h += '</tr>';
+  });
+  h += '</tbody>';
+
+  document.getElementById('calTable').innerHTML = h;
+  var total = STATE.entries.length;
+  var official = STATE.entries.filter(function(e){var a=STATE.accounts.find(function(x){return x.name===e.account;});return a&&a.type==='official';}).length;
+  var undercover = total - official;
+  document.getElementById('statBar').innerHTML = '本月共 <strong>'+total+'</strong> 条排期 &nbsp;·&nbsp; 官号 <strong style="color:#7dd3fc">'+official+'</strong> &nbsp;·&nbsp; 水下号 <strong style="color:#c084fc">'+undercover+'</strong>';
+}
+
+function renderAccounts() {
+  var list = document.getElementById('accList');
+  list.innerHTML = STATE.accounts.map(function(a,i){
+    var cls = a.type==='official'?'official':'undercover';
+    return '<span class="acc-tag '+cls+'">'+a.name+' <span class="del" onclick="delAcc('+i+')">✕</span></span>';
+  }).join('');
+}
+
+// === Navigation ===
+function prevMonth(){STATE.month--;if(STATE.month<0){STATE.month=11;STATE.year--;}render();}
+function nextMonth(){STATE.month++;if(STATE.month>11){STATE.month=0;STATE.year++;}render();}
+function setFilter(f){
+  STATE.filter=f;
+  document.querySelectorAll('.filters button').forEach(function(b,i){b.classList.toggle('active',(i===0&&f==='all')||(i===1&&f==='official')||(i===2&&f==='undercover'));});
+  render();
+}
+document.querySelectorAll('.filters button')[0].classList.add('active');
+
+// === Account ===
+function addAccount(){
+  var n=prompt('账号名称（如：水下号3）'); if(!n||!n.trim()) return;
+  var t=confirm('确定=官号，取消=水下号')?'official':'undercover';
+  STATE.accounts.push({name:n.trim(),type:t});
+  renderAccounts();render();save();
+}
+function delAcc(i){
+  if(!confirm('删除「'+STATE.accounts[i].name+'」？')) return;
+  var n=STATE.accounts[i].name;
+  STATE.accounts.splice(i,1);
+  STATE.entries=STATE.entries.filter(function(e){return e.account!==n;});
+  renderAccounts();render();save();
+}
+
+// === Modal ===
+function openAdd(date,acc){
+  STATE.editDate=date;STATE.editAcc=acc;
+  document.getElementById('modalBody').innerHTML = buildForm(date,acc,{account:acc,platform:'Facebook',format:'图文',time:'10:00',title:'',desc:'',status:'已排期'});
+  document.getElementById('modal').classList.add('show');
+}
+function openEdit(key){
+  var parts = decodeURI(key).split('|');
+  var e = STATE.entries.find(function(x){return x.date===parts[0]&&x.account===parts[1]&&x.title===parts[2];});
+  if(!e) return;
+  STATE.editDate=e.date;STATE.editAcc=e.account;
+  document.getElementById('modalBody').innerHTML = buildForm(e.date,e.account,e,true);
+  document.getElementById('modal').classList.add('show');
+}
+
+function buildForm(date,acc,data,isEdit){
+  var accOpts=STATE.accounts.map(function(a){return '<option value="'+a.name+'"'+(a.name===acc?' selected':'')+'>'+a.name+'</option>';}).join('');
+  var platOpts=['Facebook','Instagram','TikTok'].map(function(p){return '<option'+(p===data.platform?' selected':'')+'>'+p+'</option>';}).join('');
+  var fmtOpts=['图文','Reels','视频','直播'].map(function(f){return '<option'+(f===data.format?' selected':'')+'>'+f+'</option>';}).join('');
+  var stOpts=['已排期','已发布','待审核','草稿'].map(function(s){return '<option'+(s===data.status?' selected':'')+'>'+s+'</option>';}).join('');
+  
+  return '<input type="hidden" id="f-date" value="'+date+'">'+
+    '<div class="form-row"><div class="row2">'+
+    '<div><label>日期</label><input value="'+date+'" readonly></div>'+
+    '<div><label>账号</label><select id="f-acc">'+accOpts+'</select></div></div></div>'+
+    '<div class="form-row"><div class="row2">'+
+    '<div><label>平台</label><select id="f-plat">'+platOpts+'</select></div>'+
+    '<div><label>形式</label><select id="f-fmt">'+fmtOpts+'</select></div></div></div>'+
+    '<div class="form-row"><div class="row2">'+
+    '<div><label>时间</label><input type="time" id="f-time" value="'+(data.time||'10:00')+'"></div>'+
+    '<div><label>状态</label><select id="f-st">'+stOpts+'</select></div></div></div>'+
+    '<div class="form-row"><label>内容标题</label><input id="f-title" value="'+(data.title||'')+'" placeholder="如：半周年预告"></div>'+
+    '<div class="form-row"><label>文案要点</label><textarea id="f-desc" placeholder="发什么、话术、链接...">'+(data.desc||'')+'</textarea></div>'+
+    '<div class="form-actions">'+
+    '<button class="btn btn-primary" onclick="saveEntry()">💾 保存</button>'+
+    (isEdit?'<button class="btn btn-danger" onclick="delEntry()">🗑️ 删除</button>':'')+
+    '<button class="btn" style="background:rgba(255,255,255,0.06);color:#94a3b8" onclick="closeModal()">取消</button></div>';
+}
+
+function saveEntry(){
+  var entry = {
+    date: document.getElementById('f-date').value,
+    account: document.getElementById('f-acc').value,
+    platform: document.getElementById('f-plat').value,
+    format: document.getElementById('f-fmt').value,
+    time: document.getElementById('f-time').value,
+    title: document.getElementById('f-title').value.trim(),
+    desc: document.getElementById('f-desc').value.trim(),
+    status: document.getElementById('f-st').value
+  };
+  if(!entry.title){alert('请输入标题');return;}
+
+  // Check if editing existing entry
+  var idx = STATE.entries.findIndex(function(e){return e.date===STATE.editDate&&e.account===STATE.editAcc&&e.title===entry.title;});
+  if(idx>=0){STATE.entries[idx]=entry;}
+  else{
+    // Remove old if title changed
+    STATE.entries = STATE.entries.filter(function(e){return !(e.date===STATE.editDate&&e.account===STATE.editAcc);});
+    STATE.entries.push(entry);
+  }
+  save();closeModal();render();
+}
+
+function delEntry(){
+  if(!confirm('删除这条？')) return;
+  STATE.entries = STATE.entries.filter(function(e){return !(e.date===STATE.editDate&&e.account===STATE.editAcc);});
+  save();closeModal();render();
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+
+// === Export ===
+function exportCSV(){
+  var csv = '日期,星期,时间,平台,账号,类型,形式,标题,文案,状态\n';
+  STATE.entries.sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(e){
+    var dt = new Date(e.date);
+    var dow = DAYS[dt.getDay()];
+    var acc = STATE.accounts.find(function(a){return a.name===e.account;});
+    var typ = acc?acc.type:'';
+    csv += e.date+','+dow+','+e.time+','+e.platform+','+e.account+','+typ+','+e.format+',"'+e.title+'","'+(e.desc||'')+'",'+e.status+'\n';
+  });
+  
+  // Download
+  var blob = new Blob(["\ufeff"+csv], {type:'text/csv;charset=utf-8;'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '社媒排期_'+STATE.year+'年'+MONTHS[STATE.month]+'.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// === Init ===
+load();renderAccounts();render();
+</script>
+</body>
+</html>
