@@ -256,6 +256,25 @@ function renderPage(page) {
   else if (page === 'settings') renderSettings();
 }
 
+
+// ===== ROW BUILDERS =====
+function _lb(c,i){
+  var p=c.pointsBalance||0,st=c.status,t=c.tier||'';var stxt=st==='active'?'活跃':st==='inactive'?'非活跃':'失格';
+  return '<tr><td>'+(i+1)+'</td><td><strong>'+escHtml(c.name)+'</strong></td><td><span class="tag '+t+'">'+t+'</span></td><td>'+p+'</td><td><span class="tag '+st+'">'+stxt+'</span></td><td><button class="btn btn-sm" onclick="editCreator(' + c.id + ')">编辑</button></td></tr>';
+}
+function _cr(c){
+  var t=c.tier||'',sir=c.server||'-',aid=c.accountId||'-',uid2=c.uid||'-',p=c.pointsBalance||0,rgn=c.region||'-',st=c.status;
+  var pcls=p>=20?'good':p>=5?'med':'low';var stxt=st==='active'?'活跃':st==='inactive'?'非活跃':'失格';
+  return '<tr><td><strong>'+escHtml(c.name)+'</strong></td><td><span class="tag '+t+'">'+escHtml(t)+'</span></td><td>'+escHtml(sir)+'</td><td style="font-family:var(--mono);font-size:11px">'+escHtml(aid)+'</td><td style="font-family:var(--mono);font-size:11px">'+escHtml(uid2)+'</td><td><span class="points-badge '+pcls+'">'+p+'</span></td><td>'+escHtml(rgn)+'</td><td><span class="tag '+st+'">'+stxt+'</span></td><td><button class="btn btn-sm" onclick="editCreator(' + c.id + ')">编辑</button><button class="btn btn-sm btn-danger" onclick="deleteCreator(' + c.id + ')">删除</button></td></tr>';
+}
+function _lr(l,i){
+  var selimg=l.type==='image'?'selected':'',selvid=l.type==='video'?'selected':'';
+  return '<div class="form-row link-row" data-idx="'+i+'"><div class="form-group" style="flex:2"><label>链接</label><input name="link_url_'+i+'" value="'+escHtml(l.url||'')+'" placeholder="https://..."></div><div class="form-group"><label>互动/播放</label><input name="link_engagement_'+i+'" type="number" value="'+(l.engagement||l.views||'')+'" placeholder="0"></div><div class="form-group"><label>类型</label><select name="link_type_'+i+'"><option value="image" '+selimg+'>图文</option><option value="video" '+selvid+'>视频</option></select></div><div class="form-group"><label>积分</label><input name="link_points_'+i+'" type="number" value="'+(l.points||0)+'" placeholder="自动"></div><div style="align-self:flex-end"><button type="button" class="btn btn-sm btn-danger" onclick="this.closest(&apos;.link-row&apos;).remove()">×</button></div></div>';
+}
+function _tp(t){
+  return '<div class="template-item"><h4>📌 '+escHtml(t.category)+'</h4><div class="tp-text"><strong>🇨🇳 中文：</strong>'+escHtml(t.chinese)+'</div><div class="tp-text"><strong>🇬🇧 English：</strong>'+escHtml(t.english)+'</div><div class="flex mt8"><button class="btn btn-sm" onclick="copyTemplate(&apos;' + t.id + '&apos;,&apos;zh&apos;)">📋 复制中文</button><button class="btn btn-sm" onclick="copyTemplate(&apos;' + t.id + '&apos;,&apos;en&apos;)">📋 复制英文</button><button class="btn btn-sm" onclick="copyTemplate(&apos;' + t.id + '&apos;,&apos;both&apos;)">📋 复制双语</button><button class="btn btn-sm" onclick="editTemplate(&apos;' + t.id + '&apos;)">✏️ 编辑</button><button class="btn btn-sm btn-danger" onclick="deleteTemplate(&apos;' + t.id + '&apos;)">删除</button></div></div>';
+}
+
 // ===== DASHBOARD =====
 function renderDashboard() {
   var creators = DB.getCreators();
@@ -282,16 +301,7 @@ function renderDashboard() {
       <div class="table-wrap">
         <table>
           <tr><th>排名</th><th>名称</th><th>等级</th><th>积分余额</th><th>状态</th><th>操作</th></tr>
-          ${active.sort(function(a,b) { return (b.pointsBalance||0) - (a.pointsBalance||0); }).slice(0,10).map(function(c,i) { return `
-            <tr>
-              <td>${i+1}</td>
-              <td><strong>${escHtml(c.name)}</strong></td>
-              <td><span class="tag ${c.tier}">${c.tier}</span></td>
-              <td>${c.pointsBalance||0}</td>
-              <td><span class="tag ${c.status}">${c.status === 'active' ? '活跃' : c.status === 'inactive' ? '非活跃' : '失格'}</span></td>
-              <td><button class="btn btn-sm" onclick="editCreator('${c.id}')">编辑</button></td>
-            </tr>
-          `;}).join('')}
+          ${active.sort(function(a,b) { return (b.pointsBalance||0) - (a.pointsBalance||0); }).slice(0,10).map(_lb).join('')}
         </table>
       </div>
     </div>
@@ -335,22 +345,7 @@ function renderCreators() {
         <table>
           <tr><th>名称</th><th>等级</th><th>区服</th><th>Account ID</th><th>UID</th><th>积分</th><th>地区</th><th>状态</th><th>操作</th></tr>
           ${filtered.length === 0 ? '<tr><td colspan="9" class="empty">暂无数据</td></tr>' :
-          filtered.map(function(c) { return `
-            <tr>
-              <td><strong>${escHtml(c.name)}</strong></td>
-              <td><span class="tag ${c.tier}">${escHtml(c.tier)}</span></td>
-              <td>${escHtml(c.server||'-')}</td>
-              <td style="font-family:var(--mono);font-size:11px">${escHtml(c.accountId||'-')}</td>
-              <td style="font-family:var(--mono);font-size:11px">${escHtml(c.uid||'-')}</td>
-              <td><span class="points-badge ${(c.pointsBalance||0) >= 20 ? 'good' : (c.pointsBalance||0) >= 5 ? 'med' : 'low'}">${c.pointsBalance||0}</span></td>
-              <td>${escHtml(c.region||'-')}</td>
-              <td><span class="tag ${c.status}">${c.status === 'active' ? '活跃' : c.status === 'inactive' ? '非活跃' : '失格'}</span></td>
-              <td>
-                <button class="btn btn-sm" onclick="editCreator('${c.id}')">编辑</button>
-                <button class="btn btn-sm btn-danger" onclick="deleteCreator('${c.id}')">删除</button>
-              </td>
-            </tr>
-          `;}).join('')}
+          filtered.map(_cr).join('')}
         </table>
       </div>
     </div>
@@ -448,7 +443,7 @@ function renderMonthly() {
           subs.map(function(s) {
             var c = DB.getCreator(s.creatorId);
             var name = c ? c.name : '(已删除)';
-            return '<tr><td><strong>' + escHtml(name) + '</strong></td><td>' + (s.links? s.links.length : 0) + '</td><td>' + (s.imagePoints||0) + '</td><td>' + (s.videoPoints||0) + '</td><td><strong>' + (s.totalPoints||0) + '</strong></td><td>' + (s.consistentBonus||0) + '</td><td><span class="tag ' + (s.rewardStatus === 'sent' ? 'active' : 'inactive') + '">' + (s.rewardStatus === 'sent' ? '已发放' : '待处理') + '</span></td><td><button class="btn btn-sm" onclick="editSubmission('' + s.id + '')">编辑</button> <button class="btn btn-sm btn-danger" onclick="deleteSubmission('' + s.id + '')">删除</button></td></tr>';
+            return '<tr><td><strong>' + escHtml(name) + '</strong></td><td>' + (s.links? s.links.length : 0) + '</td><td>' + (s.imagePoints||0) + '</td><td>' + (s.videoPoints||0) + '</td><td><strong>' + (s.totalPoints||0) + '</strong></td><td>' + (s.consistentBonus||0) + '</td><td><span class="tag ' + (s.rewardStatus === 'sent' ? 'active' : 'inactive') + '">' + (s.rewardStatus === 'sent' ? '已发放' : '待处理') + '</span></td><td><button class="btn btn-sm" onclick="editSubmission(&apos;' + s.id + '&apos;)">编辑</button> <button class="btn btn-sm btn-danger" onclick="deleteSubmission(&apos;' + s.id + '&apos;)">删除</button></td></tr>';
           }).join('')}
         </table>
       </div>
@@ -466,15 +461,7 @@ function showSubmissionForm(id) {
 
   var linksHtml = '';
   if (s && s.links) {
-    linksHtml = s.links.map(function(l, i) { return `
-      <div class="form-row link-row" data-idx="${i}">
-        <div class="form-group" style="flex:2"><label>链接</label><input name="link_url_${i}" value="${escHtml(l.url)}" placeholder="https://..."></div>
-        <div class="form-group"><label>互动/播放</label><input name="link_engagement_${i}" type="number" value="${l.engagement||l.views||''}" placeholder="0"></div>
-        <div class="form-group"><label>类型</label><select name="link_type_${i}"><option value="image" ${l.type==='image'?'selected':''}>图文</option><option value="video" ${l.type==='video'?'selected':''}>视频</option></select></div>
-        <div class="form-group"><label>积分</label><input name="link_points_${i}" type="number" value="${l.points||0}" placeholder="自动"></div>
-        <div style="align-self:flex-end"><button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.link-row').remove()">×</button></div>
-      </div>
-    `; }).join('');
+    linksHtml = s.links.map(function(l,i) { return _lr(l,i); }).join('');
   }
 
   showModal(`
@@ -510,7 +497,7 @@ function addLinkRow() {
   var idx = container.children.length;
   var div = document.createElement('div');
   div.className = 'form-row link-row';
-  div.innerHTML = '<div class="form-group" style="flex:2"><label>链接</label><input name="link_url_' + idx + '" placeholder="https://..."></div><div class="form-group"><label>互动/播放</label><input name="link_engagement_' + idx + '" type="number" placeholder="0"></div><div class="form-group"><label>类型</label><select name="link_type_' + idx + '"><option value="image">图文</option><option value="video">视频</option></select></div><div class="form-group"><label>积分</label><input name="link_points_' + idx + '" type="number" placeholder="自动"></div><div style="align-self:flex-end"><button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.link-row').remove()">×</button></div>';
+  div.innerHTML = '<div class="form-group" style="flex:2"><label>链接</label><input name="link_url_' + idx + '" placeholder="https://..."></div><div class="form-group"><label>互动/播放</label><input name="link_engagement_' + idx + '" type="number" placeholder="0"></div><div class="form-group"><label>类型</label><select name="link_type_' + idx + '"><option value="image">图文</option><option value="video">视频</option></select></div><div class="form-group"><label>积分</label><input name="link_points_' + idx + '" type="number" placeholder="自动"></div><div style="align-self:flex-end"><button type="button" class="btn btn-sm btn-danger" onclick="this.closest(&apos;.link-row&apos;).remove()">×</button></div>';
   container.appendChild(div);
 }
 
@@ -694,20 +681,7 @@ function renderTemplates() {
     <div class="card">
       <div class="card-title">💬 话术模板 <button class="btn btn-sm" style="margin-left:auto" onclick="addTemplate()">➕ 新增</button></div>
       ${templates.length === 0 ? '<div class="empty">暂无话术模板</div>' :
-      templates.map(function(t) { return `
-        <div class="template-item">
-          <h4>📌 ${escHtml(t.category)}</h4>
-          <div class="tp-text"><strong>🇨🇳 中文：</strong>${escHtml(t.chinese)}</div>
-          <div class="tp-text"><strong>🇬🇧 English：</strong>${escHtml(t.english)}</div>
-          <div class="flex mt8">
-            <button class="btn btn-sm" onclick="copyTemplate('${t.id}','zh')">📋 复制中文</button>
-            <button class="btn btn-sm" onclick="copyTemplate('${t.id}','en')">📋 复制英文</button>
-            <button class="btn btn-sm" onclick="copyTemplate('${t.id}','both')">📋 复制双语</button>
-            <button class="btn btn-sm" onclick="editTemplate('${t.id}')">✏️ 编辑</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteTemplate('${t.id}')">删除</button>
-          </div>
-        </div>
-      `;}).join('')}
+      templates.map(function(t) { return _tp(t); }).join('')}
     </div>
   `;
 }
