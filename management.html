@@ -137,10 +137,24 @@ var DEFAULT_SETTINGS = {"imageThreshold": 40, "imagePoints1": 1, "imageThreshold
 var DB = {
   _data: null,
   init: function() {
-    if (localStorage.getItem('koc_data')) {
-      this._data = JSON.parse(localStorage.getItem('koc_data'));
+    var stored = localStorage.getItem('koc_data');
+    if (stored) {
+      this._data = JSON.parse(stored);
+      var seedReady = typeof KOC_SEED_DATA !== 'undefined' && KOC_SEED_DATA.creators;
+      var needsUpgrade = !this._data._seedVersion;
+      if (seedReady && needsUpgrade) {
+        this._data = {
+          _seedVersion: "1.0",
+          creators: JSON.parse(JSON.stringify(KOC_SEED_DATA.creators)),
+          submissions: JSON.parse(JSON.stringify(KOC_SEED_DATA.submissions)),
+          templates: this._data.templates || JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)),
+          settings: this._data.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS))
+        };
+        this.save();
+      }
     } else {
       this._data = {
+        _seedVersion: "1.0",
         creators: JSON.parse(JSON.stringify(KOC_SEED_DATA.creators)),
         submissions: JSON.parse(JSON.stringify(KOC_SEED_DATA.submissions)),
         templates: JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)),
