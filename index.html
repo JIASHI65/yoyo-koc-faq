@@ -5,54 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yoyo Creative Studio — KOC FAQ</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0e14;--surface:#121821;--surface2:#1a2332;--border:#283040;--text:#e4e8ef;--text-dim:#8895a8;--accent:#58a6ff;--green:#3fb950;--orange:#d29922;--pink:#f778ba;--purple:#bc8cff}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
-.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,var(--surface),rgba(18,24,33,0.95));border-bottom:1px solid var(--border);padding:12px 20px;backdrop-filter:blur(12px)}
-.header h1{font-size:16px;font-weight:600}
-.header .sub{font-size:11px;color:var(--text-dim);margin-top:2px}
+:root{--bg:#fff5f8;--surface:#ffffff;--surface2:#ffeef3;--border:#ffc0cb;--border-light:#ffd6e0;--text:#5c3d4e;--text-dim:#b07f8e;--text-muted:#d4a0b2;--accent:#ff69b4;--green:#ff8fab;--orange:#ffb347;--pink:#ff1493;--purple:#c77dff;--blue:#b0d4ff;--shadow:0 2px 12px rgba(255,105,180,0.08)}
+body{font-family:'Comic Sans MS','Chalkboard SE','Segoe UI',cursive,sans-serif;background:var(--bg);color:var(--text);line-height:1.8;background-image:radial-gradient(circle at 20% 50%, #ffe4ec 0%, #fff5f8 100%)}
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,#ffb6c1,rgba(255,182,193,0.92));border-bottom:2px solid var(--pink);padding:14px 20px;text-align:center;box-shadow:0 2px 16px rgba(255,105,180,0.15)}
+.header h1{font-size:15px;font-weight:700;color:#fff;text-shadow:1px 1px 0 #ff69b4;letter-spacing:.5px}
+.header .sub{font-size:10px;color:#fff0fa;margin-top:3px;opacity:.9}
 .container{max-width:800px;margin:0 auto;padding:20px}
-.section{margin-bottom:24px}
-.section-title{font-size:14px;font-weight:600;color:var(--accent);padding:8px 12px;background:var(--surface2);border-radius:6px;margin-bottom:12px;border-left:3px solid var(--accent)}
-.q-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:8px}
-.q-item:hover{border-color:var(--border+)}
-.q{font-weight:600;font-size:13px;margin-bottom:4px;color:var(--text)}
+.section{margin-bottom:24px;position:relative}
+.section-title{font-size:13px;font-weight:700;color:var(--accent);padding:8px 14px;background:var(--surface2);border-radius:12px;margin-bottom:12px;border:1.5px solid var(--border);display:inline-block;box-shadow:0 2px 8px rgba(255,105,180,0.06)}
+.section-title::before{content:'\u2b50 \ufe0f '}
+.q-item{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:12px 16px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow);transition:all .2s}
+.q-item:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,105,180,0.12);border-color:var(--accent)}
+.q{font-weight:700;font-size:13px;margin-bottom:4px;color:var(--text)}
+.q::before{content:'\ud83d\udc8c '}
 .a{font-size:12px;color:var(--text-dim);line-height:1.8}
 .a p{margin:4px 0}
-.a .tag{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;margin-right:4px;vertical-align:middle}
-.tag.source{background:rgba(88,166,255,0.1);color:var(--accent)}
-.tag.warn{background:rgba(210,153,34,0.12);color:var(--orange)}
-.tag.new{background:rgba(63,185,80,0.1);color:var(--green)}
-.tag.correction{background:rgba(248,81,73,0.1);color:var(--pink)}
-.a table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px}
-.a td,.a th{border:1px solid var(--border);padding:4px 8px;text-align:left}
-.a th{background:var(--surface2);color:var(--text-dim);font-weight:500}
-.a ul,.a ol{padding-left:16px;margin:4px 0}
-.a li{margin:2px 0}
+.a .tag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:999px;margin-right:4px;vertical-align:middle;font-weight:600}
+.tag.source{background:rgba(255,105,180,0.08);color:var(--accent);border:1px solid rgba(255,105,180,0.15)}
+.tag.warn{background:rgba(255,179,71,0.1);color:var(--orange);border:1px solid rgba(255,179,71,0.15)}
+.tag.new{background:rgba(255,143,171,0.1);color:var(--green);border:1px solid rgba(255,143,171,0.2)}
+.tag.correction{background:rgba(255,20,147,0.06);color:var(--pink);border:1px solid rgba(255,20,147,0.12)}
+.a table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px;border-radius:10px;overflow:hidden}
+.a td,.a th{border:1px solid var(--border);padding:5px 10px;text-align:left}
+.a th{background:var(--surface2);color:var(--text);font-weight:600}
+.a ul,.a ol{padding-left:18px;margin:4px 0}
+.a li{margin:3px 0}
+.a li::marker{color:var(--accent)}
 .a strong{color:var(--text)}
-hr{border:none;border-top:1px solid var(--border);margin:16px 0}
-.flow-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:11px;font-family:monospace;line-height:2;margin-top:12px}
-.footer{text-align:center;font-size:10px;color:var(--text-dim);padding:20px;border-top:1px solid var(--border);margin-top:20px}
+hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
+.flow-box{background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:11px;line-height:2;margin-top:12px;font-family:'Comic Sans MS',cursive,sans-serif;box-shadow:0 2px 8px var(--shadow)}
+.footer{text-align:center;font-size:10px;color:var(--text-muted);padding:20px;border-top:2px dashed var(--border);margin-top:20px}
+.footer b{color:var(--accent)}
 @media(max-width:600px){.container{padding:12px}.q-item{padding:10px}}
 /* ===== Search & Autocomplete ===== */
 .search-wrap{position:relative;margin-bottom:14px}
-.search-wrap input{width:100%;padding:9px 12px 9px 34px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border .2s}
-.search-wrap input:focus{border-color:var(--accent)}
-.search-wrap input::placeholder{color:#475569}
-.search-wrap .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.4;pointer-events:none}
-.search-wrap .clear-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#475569;font-size:16px;cursor:pointer;display:none;padding:2px 6px;line-height:1}
-.search-wrap .clear-btn:hover{color:var(--text)}
-.search-suggest{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:0 0 8px 8px;max-height:240px;overflow-y:auto;display:none;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.search-suggest .s-item{padding:8px 12px;font-size:12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text-dim);display:flex;align-items:center;gap:6px}
+.search-wrap input{width:100%;padding:9px 34px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:999px;color:var(--text);font-size:13px;outline:none;transition:all .2s;text-align:center;font-family:'Comic Sans MS',cursive,sans-serif}
+.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,105,180,0.1)}
+.search-wrap input::placeholder{color:var(--text-muted);text-align:center}
+.search-wrap .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.5;pointer-events:none}
+.search-wrap .clear-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;display:none;padding:2px 6px;line-height:1}
+.search-wrap .clear-btn:hover{color:var(--accent)}
+.search-suggest{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;max-height:240px;overflow-y:auto;display:none;z-index:99;box-shadow:0 8px 24px rgba(255,105,180,0.12);margin-top:4px}
+.search-suggest .s-item{padding:8px 14px;font-size:12px;cursor:pointer;border-bottom:1px solid rgba(255,192,203,0.2);color:var(--text-dim);display:flex;align-items:center;gap:6px}
 .search-suggest .s-item:last-child{border-bottom:none}
 .search-suggest .s-item:hover{background:var(--surface2);color:var(--text)}
-.search-suggest .s-item .s-badge{font-size:9px;background:rgba(88,166,255,.1);color:var(--accent);padding:1px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0}
-.search-suggest .s-item .s-match{color:var(--accent);font-weight:600}
-.search-suggest .s-empty{padding:12px;font-size:12px;color:#475569;text-align:center}
+.search-suggest .s-item .s-badge{font-size:9px;background:rgba(255,105,180,0.08);color:var(--accent);padding:2px 8px;border-radius:999px;white-space:nowrap;border:1px solid rgba(255,105,180,0.12)}
+.search-suggest .s-item .s-match{color:var(--accent);font-weight:700}
+.search-suggest .s-empty{padding:14px;font-size:12px;color:var(--text-muted);text-align:center}
 .q-item.hide{display:none!important}
 .section.hide{display:none!important}
-.search-count{font-size:11px;color:#475569;margin:0 0 10px;display:none}
-
+.search-count{font-size:11px;color:var(--text-muted);margin:0 0 10px;display:none;text-align:center}
 </style>
 </head>
 <body>
@@ -622,7 +626,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 📎 v2.0 · 交叉验证 #yoyo-rules-faq #reward-rules #bulletin-board 等多频道官方信息源<br>
 ⚠️ 标注 📷 的内容来自截图<br>
 如有冲突，以 #yoyo-rules-faq 频道的最新官方回答为准<br>
-制作人：小狗狗 Codex | Yoyo Creative Studio 运营团队
+制作人：小狼狗和他的主人莎莎 🐾 | Yoyo Creative Studio 运营团队
 </div>
 
 </div>
