@@ -34,6 +34,25 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 .flow-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:11px;font-family:monospace;line-height:2;margin-top:12px}
 .footer{text-align:center;font-size:10px;color:var(--text-dim);padding:20px;border-top:1px solid var(--border);margin-top:20px}
 @media(max-width:600px){.container{padding:12px}.q-item{padding:10px}}
+/* ===== Search & Autocomplete ===== */
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap input{width:100%;padding:9px 12px 9px 34px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border .2s}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap input::placeholder{color:#475569}
+.search-wrap .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.4;pointer-events:none}
+.search-wrap .clear-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#475569;font-size:16px;cursor:pointer;display:none;padding:2px 6px;line-height:1}
+.search-wrap .clear-btn:hover{color:var(--text)}
+.search-suggest{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:0 0 8px 8px;max-height:240px;overflow-y:auto;display:none;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.search-suggest .s-item{padding:8px 12px;font-size:12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text-dim);display:flex;align-items:center;gap:6px}
+.search-suggest .s-item:last-child{border-bottom:none}
+.search-suggest .s-item:hover{background:var(--surface2);color:var(--text)}
+.search-suggest .s-item .s-badge{font-size:9px;background:rgba(88,166,255,.1);color:var(--accent);padding:1px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0}
+.search-suggest .s-item .s-match{color:var(--accent);font-weight:600}
+.search-suggest .s-empty{padding:12px;font-size:12px;color:#475569;text-align:center}
+.q-item.hide{display:none!important}
+.section.hide{display:none!important}
+.search-count{font-size:11px;color:#475569;margin:0 0 10px;display:none}
+
 </style>
 </head>
 <body>
@@ -44,6 +63,14 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 </div>
 
 <div class="container">
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input id="searchInput" type="text" placeholder="搜索 FAQ… 输入关键词（积分、结算、Reddit、奖励…）" autocomplete="off">
+  <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✖</button>
+  <div class="search-suggest" id="suggestBox"></div>
+</div>
+<div class="search-count" id="searchCount"></div>
+
 
 <div class="q-item" style="background:var(--surface2);border-left:3px solid var(--orange)">
   <div class="a" style="color:var(--text-dim);font-size:11px">
@@ -437,5 +464,171 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 </div>
 
 </div>
+
+<script>
+(function() {
+  var input = document.getElementById('searchInput');
+  var suggest = document.getElementById('suggestBox');
+  var clearBtn = document.getElementById('clearBtn');
+  var countEl = document.getElementById('searchCount');
+  if (!input) return;
+
+  // Build FAQ index from DOM
+  var items = [];
+  document.querySelectorAll('.q-item').forEach(function(el, idx) {
+    var qEl = el.querySelector('.q');
+    var aEl = el.querySelector('.a');
+    if (!qEl) return;
+    var q = (qEl.textContent || '').trim();
+    var a = (aEl ? aEl.textContent || '' : '').trim();
+    var sectionEl = el.closest('.section');
+    var sectionTitle = sectionEl ? (sectionEl.querySelector('.section-title')?.textContent || '').trim() : '';
+    items.push({el: el, section: sectionEl, q: q, a: a, sectionTitle: sectionTitle, idx: idx});
+  });
+
+  function highlight(text, keyword) {
+    if (!keyword) return text;
+    var words = keyword.trim().split(/[\s,，]+/).filter(Boolean);
+    var result = text;
+    words.forEach(function(w) {
+      var re = new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+      result = result.replace(re, '<span class="s-match">$1</span>');
+    });
+    return result;
+  }
+
+  function doSearch(keyword) {
+    var trimmed = keyword.trim().toLowerCase();
+    var hasText = trimmed.length > 0;
+    var wordList = trimmed.split(/[\s,，]+/).filter(Boolean);
+
+    // Filter items
+    var matchCount = 0;
+    items.forEach(function(item) {
+      var qLow = item.q.toLowerCase();
+      var aLow = item.a.toLowerCase();
+      var matchAll = wordList.length === 0 || wordList.every(function(w) { return qLow.indexOf(w) >= 0 || aLow.indexOf(w) >= 0; });
+      item.el.classList.toggle('hide', hasText && !matchAll);
+      if (matchAll && hasText) matchCount++;
+    });
+
+    // Hide/show sections
+    document.querySelectorAll('.section').forEach(function(sec) {
+      var visible = false;
+      sec.querySelectorAll('.q-item').forEach(function(qi) {
+        if (!qi.classList.contains('hide')) visible = true;
+      });
+      sec.classList.toggle('hide', hasText && !visible);
+    });
+
+    // Clear button visibility
+    clearBtn.style.display = hasText ? 'block' : 'none';
+
+    // Count
+    if (hasText) {
+      countEl.textContent = matchCount + ' / ' + items.length + ' 个问题匹配';
+      countEl.style.display = 'block';
+    } else {
+      countEl.style.display = 'none';
+    }
+  }
+
+  function buildSuggestions(keyword) {
+    var trimmed = keyword.trim().toLowerCase();
+    if (trimmed.length < 1) { suggest.style.display = 'none'; return; }
+    var wordList = trimmed.split(/[\s,，]+/).filter(Boolean);
+    if (wordList.length === 0) { suggest.style.display = 'none'; return; }
+
+    var scored = [];
+    items.forEach(function(item) {
+      var qLow = item.q.toLowerCase();
+      var aLow = item.a.toLowerCase();
+      // Score: exact title match > question match > answer match
+      var score = 0;
+      var matchedWords = [];
+      wordList.forEach(function(w) {
+        if (qLow.indexOf(w) >= 0) { score += 10; matchedWords.push(w); }
+        if (item.sectionTitle.toLowerCase().indexOf(w) >= 0) { score += 5; matchedWords.push(w); }
+        if (aLow.indexOf(w) >= 0) { score += 3; matchedWords.push(w); }
+      });
+      if (score > 0 && matchedWords.length > 0) scored.push({item: item, score: score, matched: matchedWords});
+    });
+
+    scored.sort(function(a,b) { return b.score - a.score; });
+    var top = scored.slice(0, 8);
+
+    var html = '';
+    if (top.length === 0) {
+      html = '<div class="s-empty">\u6ca1\u6709\u5339\u914d\u7684\u95ee\u9898</div>';
+    } else {
+      top.forEach(function(s) {
+        var secTag = s.item.sectionTitle.replace(/^\S+/, '').trim().substring(0, 6);
+        var snippet = s.item.q.length > 40 ? s.item.q.substring(0, 40) + '...' : s.item.q;
+        html += '<div class="s-item" data-idx="' + s.item.idx + '">';
+        html += '<span class="s-badge">' + (secTag || 'FAQ') + '</span>';
+        html += '<span>' + highlight(snippet, s.matched.join(' ')) + '</span></div>';
+      });
+    }
+    suggest.innerHTML = html;
+    suggest.style.display = 'block';
+
+    // Click handler for suggestions
+    suggest.querySelectorAll('.s-item').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var idx = parseInt(el.getAttribute('data-idx'));
+        if (isNaN(idx)) return;
+        // Scroll to item
+        items[idx].el.scrollIntoView({behavior: 'smooth', block: 'center'});
+        // Highlight briefly
+        items[idx].el.style.transition = 'background .3s';
+        items[idx].el.style.background = 'rgba(88,166,255,.12)';
+        setTimeout(function() { items[idx].el.style.background = ''; }, 1500);
+        suggest.style.display = 'none';
+      });
+    });
+  }
+
+  // Event handlers
+  var debounceTimer = null;
+  input.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    var val = input.value;
+    debounceTimer = setTimeout(function() {
+      doSearch(val);
+      buildSuggestions(val);
+    }, 150);
+  });
+
+  input.addEventListener('focus', function() {
+    if (input.value.trim().length > 0) {
+      buildSuggestions(input.value);
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!input.contains(e.target) && !suggest.contains(e.target)) {
+      suggest.style.display = 'none';
+    }
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { suggest.style.display = 'none'; input.blur(); }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      var items = suggest.querySelectorAll('.s-item');
+      var first = items[0];
+      if (first) first.focus ? first.focus() : first.click();
+    }
+  });
+
+  window.clearSearch = function() {
+    input.value = '';
+    doSearch('');
+    suggest.style.display = 'none';
+    input.focus();
+  };
+})();
+</script>
+
 </body>
 </html>
