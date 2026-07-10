@@ -149,10 +149,23 @@ var DEFAULT_SUBMISSIONS = """ + json.dumps(submissions_demo, ensure_ascii=False)
 var DB = {
   _data: null,
   init: function() {
-    if (localStorage.getItem('koc_data')) {
-      this._data = JSON.parse(localStorage.getItem('koc_data'));
+    var stored = localStorage.getItem('koc_data');
+    if (stored) {
+      this._data = JSON.parse(stored);
+      // Auto-migrate from old data format (8 creators) to full seed data
+      if (!this._data._v && DEFAULT_CREATORS.length > this._data.creators.length) {
+        this._data = {
+          _v: 1,
+          creators: JSON.parse(JSON.stringify(DEFAULT_CREATORS)),
+          submissions: JSON.parse(JSON.stringify(DEFAULT_SUBMISSIONS)),
+          templates: this._data.templates || JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)),
+          settings: this._data.settings || JSON.parse(JSON.stringify(DEFAULT_SETTINGS))
+        };
+        this.save();
+      }
     } else {
       this._data = {
+        _v: 1,
         creators: JSON.parse(JSON.stringify(DEFAULT_CREATORS)),
         submissions: JSON.parse(JSON.stringify(DEFAULT_SUBMISSIONS)),
         templates: JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)),
