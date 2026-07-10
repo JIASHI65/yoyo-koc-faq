@@ -115,6 +115,20 @@ hr{border:none;border-top:2px dashed var(--line);margin:24px 0}
   box-shadow:3px 3px 0 rgba(67,38,62,.1)}
 .data-banner strong{color:var(--ink)}
 @media(max-width:600px){.container{padding:14px}.q-item{padding:12px}.q{padding-right:50px}}
+
+.stag{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.12em;padding:2px 8px;border-radius:999px;margin-right:4px;vertical-align:middle;display:inline-block}
+.stag.ssr{background:var(--gold);color:#5A3A00;border:1.5px solid #D4921E}
+.stag.sr{background:var(--lav);color:#fff;border:1.5px solid #7055B0}
+.stag.r{background:var(--mint);color:#fff;border:1.5px solid #1E8F76}
+.copy-btn{position:absolute;top:12px;right:52px;z-index:2;background:var(--card);border:1.5px solid var(--ink);border-radius:8px;font-size:14px;padding:4px 8px;cursor:pointer;opacity:0;transition:opacity .15s,transform .12s;line-height:1;box-shadow:1px 1px 0 rgba(67,38,62,.06)}
+.q-item:hover .copy-btn{opacity:1}
+.copy-btn:hover{transform:scale(1.1);background:#FDE3EC}
+.copy-btn.copied{opacity:1;background:#DFF4EE;border-color:var(--mint)}
+.q-item{position:relative}
+.rarity-badge{right:14px}
+.a{-webkit-user-select:none;user-select:none}
+body{-webkit-touch-callout:none}
+@media print{body{display:none!important}}
 </style>
 </head>
 <body>
@@ -135,555 +149,15 @@ hr{border:none;border-top:2px dashed var(--line);margin:24px 0}
   <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✖</button>
   <div class="search-suggest" id="suggestBox"></div>
 </div>
+
 <div class="search-count" id="searchCount"></div>
-
-
-<div class="q-item rarity-r rarity-r" class="q-item rarity-r"><span class="rarity-badge r">R</span>
-  <div class="a" style="color:var(--text-dim);font-size:11px">
-    <strong>📌 数据来源说明：</strong> v1 版仅基于 🎨 #creators-exchange 频道的玩家对话整理。<br>
-    <strong>v2 版交叉验证了以下官方信息源：</strong><br>
-    📚 #yoyo-rules-faq（运营官方回答）· 📒 #reward-rules（奖励规则公告）· 📢 #bulletin-board（月度公告）· 📍 #rules（社群规则）
-  </div>
+<div id="faqContainer"></div>
+<div class="footer">
+📎 v2.0 · 交叉验证 #yoyo-rules-faq #reward-rules #bulletin-board 等多频道官方信息源<br>
+⚠️ 标注 📷 的内容来自截图<br>
+如有冲突，以 #yoyo-rules-faq 频道的最新官方回答为准<br>
+制作人：小狼狗和他的主人莎莎 🐾 | Yoyo Creative Studio 运营团队
 </div>
-
-<!-- 一、入门与加入 -->
-<div class="section">
-  <div class="section-title">📌 一、入门与加入</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q1</span>：Yoyo Creative Studio 是什么？</div>
-    <div class="a">
-      <p>我们是欧美休闲游戏 <strong>My Leisure Time</strong> 的官方 KOC 创作者社群。通过创作 UGC 内容（图文/视频）推广游戏，获得奖励和游戏福利。</p>
-      <p><span class="tag source">#reward-rules Q1</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q2</span>：谁能参加？</div>
-    <div class="a"><p>任何喜欢 My Leisure Time 的玩家都可以申请。目前主要面向欧美地区用户。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q3</span>：怎么加入？</div>
-    <div class="a">
-      <ol>
-        <li>加入 Discord → 在 #welcome 阅读规则</li>
-        <li><strong>私信管理员（DM arissalee.）</strong> 提供：Discord ID、社交平台主页链接、国家/地区</li>
-        <li>管理员审核后分配角色</li>
-      </ol>
-      <p><span class="tag correction">更正</span> 不需要在 #introduce 频道自我介绍。官方流程要求直接 DM 管理员。</p>
-      <p><span class="tag source">#rules + #yoyo-bulletin-board</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q4</span>：有最低产出要求吗？没达到会被踢吗？</div>
-    <div class="a">
-      <p>没有强制"踢出"机制。但<strong>连续 2 周无产出</strong>可能会被移除 KOC 角色。目前没有每月最低积分硬门槛。</p>
-      <p><span class="tag source">#reward-rules Q4</span></p>
-    </div>
-  </div>
-</div>
-
-<!-- 二、内容创作 -->
-<div class="section">
-  <div class="section-title">📝 二、内容创作要求</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q5</span>：要做什么类型的内容？</div>
-    <div class="a">
-      <table>
-        <tr><th>平台</th><th>形式</th><th>要求</th></tr>
-        <tr><td>Instagram</td><td>图文贴 / Reels</td><td>公开账号</td></tr>
-        <tr><td>Facebook</td><td>图文贴 / 视频</td><td>个人主页或群组均可</td></tr>
-        <tr><td>TikTok</td><td>短视频</td><td>公开账号</td></tr>
-        <tr><td>YouTube</td><td>视频</td><td>🆕 7月起视频类纳入积分</td></tr>
-        <tr><td>Reddit</td><td>图文贴</td><td>🆕 7月新增</td></tr>
-      </table>
-      <p><span class="tag source">#reward-rules Q6</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q6</span>：内容有什么要求？</div>
-    <div class="a">
-      <ul>
-        <li>✅ 原创（不能搬运/抄袭）</li>
-        <li>✅ 清晰展示 MLT 游戏画面</li>
-        <li>✅ <strong>推荐</strong>带官方 hashtag <strong>#myleisuretime</strong></li>
-        <li>✅ 文字为英文</li>
-        <li>❌ 不能说"paid promotion"、"I'm making money"等</li>
-        <li>❌ <strong>禁止 AI 生成内容</strong> — Canva 魔法橡皮擦等 AI 功能可能被标记</li>
-      </ul>
-      <p><span class="tag source">#yoyo-rules-faq Q1</span> <span class="tag correction">修正</span></p>
-      <p><strong>Hashtag 政策：</strong> Facebook/TikTok/IG → 推荐加 #myleisuretime，<strong>不是必须</strong>。Reddit → 豁免。加 hashtag 的好处：帮助识别创作者账号 + 高质量加标签帖子优先获得官方流量助推。</p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q7</span>：一个作品可以发多个平台吗？</div>
-    <div class="a">
-      <p><strong>可以，且每个平台都算独立作品。</strong> 同一平台重复发同一条内容 → 只计表现最好的一次。</p>
-      <p><span class="tag new">2026年7月新规则</span> 跨平台同内容 = 独立计分（此前旧规则曾规定"只算最佳平台"）。</p>
-      <p><span class="tag source">#yoyo-rules-faq Q3</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q8</span>：我可以宣传自己的 Instagram 账号吗？</div>
-    <div class="a"><p>可以在社群内分享，但建议以 MLT 游戏内容为主。</p></div>
-  </div>
-</div>
-
-<!-- 三、提交与审核 -->
-<div class="section">
-  <div class="section-title">📮 三、提交与审核</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q9</span>：内容发布后要做什么？</div>
-    <div class="a">
-      <p>把链接发到 <strong>#🎨｜creators-exchange</strong> 频道，格式：<code>平台 | 链接 | 作品类型</code></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q10</span>：审核要多久？</div>
-    <div class="a"><p>通常在 24-48 小时内。高峰期可能延长到一周。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q11</span>：审核不通过的原因？</div>
-    <div class="a">
-      <ul>
-        <li>❌ 链接打不开（隐私设置问题）</li>
-        <li>❌ 图片不清晰（Canva 导出质量问题）</li>
-        <li>❌ 内容与 MLT 无关</li>
-        <li>❌ 使用了 AI 生成/增强的内容</li>
-        <li>❌ 重复内容（同图多发）</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q12</span>：我编辑/修改了已发布的内容，需要重新提交吗？</div>
-    <div class="a"><p>建议<strong>重新发布新帖</strong>而不是编辑旧帖。编辑过的帖子可能被 Discord 审核系统忽略。</p></div>
-  </div>
-</div>
-
-<!-- 四、奖励与结算 -->
-<div class="section">
-  <div class="section-title">💰 四、奖励与结算</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q13</span>：积分（Points）怎么算？</div>
-    <div class="a">
-      <p><strong>2026年7月新规则：</strong></p>
-      <table>
-        <tr><th>平台</th><th>视频评分</th><th>图文评分</th></tr>
-        <tr><td>TikTok 🎥</td><td>播放量 200 / 400 views</td><td>互动量</td></tr>
-        <tr><td>YouTube 🆕</td><td>播放量 200 / 400 views</td><td>—</td></tr>
-        <tr><td>Instagram</td><td>互动量</td><td>互动量</td></tr>
-        <tr><td>Facebook</td><td>互动量</td><td>互动量</td></tr>
-        <tr><td>Reddit 🆕</td><td>—</td><td>互动量</td></tr>
-      </table>
-      <p><span class="tag source">#yoyo-rules-faq Q2</span> <span class="tag correction">修正</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q14</span>：一个月多少积分算正常？</div>
-    <div class="a"><p>月度上限为 <strong>40 分</strong>。达到上限后不再累积，下月重置。具体平均分因人而异。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q15</span>：积分上限是多少？推荐奖励计入吗？</div>
-    <div class="a">
-      <p><strong>每月最高 40 分，月初重置。</strong></p>
-      <p><span class="tag new">推荐积分是额外的</span> — 不计入每月 40 分上限。</p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q16</span>：奖励有哪些？</div>
-    <div class="a">
-      <table>
-        <tr><th>选项</th><th>说明</th></tr>
-        <tr><td>Google Play 礼品卡</td><td>2 分起兑</td></tr>
-        <tr><td>游戏钻石</td><td>2 分起兑（450钻石/2分）</td></tr>
-        <tr><td>Amazon 礼品卡</td><td>分值不等</td></tr>
-        <tr><td>📦 周边礼包 🆕</td><td>新老创作者均可获得</td></tr>
-      </table>
-      <p><span class="tag source">#reward-rules（新激励规则）</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q17</span>：一个月可以兑换多次吗？</div>
-    <div class="a"><p>一个月只能兑换一次。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q18</span>：没用完的积分下月还在吗？</div>
-    <div class="a"><p><strong>在的。</strong> 积分按月累积，兑换后剩余积分保留，不重置。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q19</span>：什么时候结算？</div>
-    <div class="a">
-      <ul>
-        <li>提交截止：每月最后一周周五</li>
-        <li>积分计算：次月第 1-2 周周一至周二</li>
-        <li>奖励发放：次月第 2-3 周</li>
-      </ul>
-      <p><span class="tag source">#reward-rules Q8</span> <span class="tag warn">📷 具体日程表见 #reward-rules 频道图片</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q20</span>：最低多少积分能兑换？</div>
-    <div class="a"><p>最低 <strong>2 分</strong> 起兑。</p></div>
-  </div>
-</div>
-
-<!-- 五、连续创作奖励 -->
-<div class="section">
-  <div class="section-title">🏆 五、连续创作奖励</div>
-
-  <div class="q-item rarity-r rarity-r" style="border-left:3px solid var(--orange)"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q21</span>：连续 5 天发布奖励</div>
-    <div class="a">
-      <ul>
-        <li>需要在同一个月内 <strong>连续 5 天</strong> 各发布至少 1 条内容</li>
-        <li>不需要在同个平台 — 跨平台合计</li>
-        <li>不需要每条都有积分 — 低互动也计</li>
-        <li>❌ 不要为了凑天数发低质量内容 — 会影响账号表现</li>
-      </ul>
-      <p><span class="tag correction">⚠️ 重要更正</span> v1 版写的是"不需要连续5天"，<strong>是错误的</strong>。官方要求"连续5天每天发"（Post for 5 straight days）。</p>
-      <p><span class="tag source">#yoyo-rules-faq Q1（连续创作奖励）</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q22</span>：连续创作奖（15 条/月）</div>
-    <div class="a">
-      <ul>
-        <li>所有类型的创作内容都合格</li>
-        <li>多个平台的提交可以合计计数</li>
-        <li>常规积分 + 创作奖励 <strong>叠加发放</strong></li>
-      </ul>
-      <p><span class="tag source">#yoyo-rules-faq Q1</span></p>
-    </div>
-  </div>
-</div>
-
-<!-- 六、链接与发布 -->
-<div class="section">
-  <div class="section-title">🔗 六、链接与发布</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q23</span>：帖子必须发在个人主页吗？</div>
-    <div class="a"><p>Facebook 个人主页或群组（如 My Leisure Time Global 群组），<strong>两者都算数</strong>。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q24</span>：分享链接打不开怎么办？</div>
-    <div class="a"><p>检查账号是否公开 → 重新复制链接 → 内容被删除则重新发布</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q25</span>：同一个内容重复发布怎么算？</div>
-    <div class="a">
-      <p>同一平台重发 → 只计表现最好的一次。不同平台 → 各算各的（2026年7月新规则）。</p>
-      <p><span class="tag source">#yoyo-rules-faq Q3</span></p>
-    </div>
-  </div>
-</div>
-
-<!-- 七、Reddit -->
-<div class="section">
-  <div class="section-title">🆕 七、Reddit（2026年7月新增）</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q26</span>：Reddit 现在也算吗？</div>
-    <div class="a"><p>是的，7 月起 Reddit 帖子计入积分。目前仅统计 7 月及之后的发帖。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q27</span>：在 Reddit 发什么内容？</div>
-    <div class="a"><p>分享 MLT 游戏内容、设计展示、游戏体验等。需发布在公开社区。</p></div>
-  </div>
-</div>
-
-<!-- 八、推荐奖励 -->
-<div class="section">
-  <div class="section-title">🎁 八、推荐奖励</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q28</span>：推荐朋友加入有奖励吗？</div>
-    <div class="a">
-      <p>✅ 成功推荐朋友成为 KOC 后可获得额外积分。推荐积分<strong>不计入每月 40 分上限</strong>。</p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q29</span>：2026年7月新增了哪些创作者计划？</div>
-    <div class="a">
-      <ul>
-        <li>🎀 Refer-a-Friend 推荐计划</li>
-        <li>🌟 New Creator Event 新手活动</li>
-        <li>⭐ Creator Tier System 创作者等级系统</li>
-      </ul>
-      <p><span class="tag source">#reward-rules（新激励规则）</span></p>
-    </div>
-  </div>
-</div>
-
-<!-- 九、社群规则 -->
-<div class="section">
-  <div class="section-title">📋 九、社群规则</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q30</span>：Discord 里可以发什么？</div>
-    <div class="a">
-      <ul>
-        <li>✅ 作品分享 · 创作交流 · 游戏讨论</li>
-        <li>✅ 设计技巧分享（如无障碍设计、创意搭建）</li>
-        <li>❌ 广告/第三方推广 · 刷屏/人身攻击</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q31</span>：有问题找谁？</div>
-    <div class="a">
-      <p>内容审核 → #creators-exchange · 奖励结算 → DM 管理员</p>
-    </div>
-  </div>
-</div>
-
-<!-- 十、其他 -->
-<div class="section">
-  <div class="section-title">❓ 十、其他</div>
-
-  <div class="q-item rarity-r rarity-r" style="border-left:3px solid var(--orange)"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q32</span>：我以前发的帖子算吗？</div>
-    <div class="a">
-      <p><strong>如果当月的结算日前加入并提交了链接，该月的内容也算。</strong></p>
-      <p>示例：7 月加入，6 月内容也有效，只要在 <strong>7月10日前</strong> 提交 Google Form。</p>
-      <p><span class="tag correction">更正</span> v1 写的是"加入后开始算"，实际上当月及上个月的内容都可能计入。</p>
-      <p><span class="tag source">#yoyo-rules-faq Q2</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q33</span>：新手有没有额外奖励？</div>
-    <div class="a"><p>有。New Creator Event 新手活动，首月可能有额外积分。具体见最新公告。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q34</span>：Canva 导出图片不清晰怎么办？</div>
-    <div class="a"><p>导出选最高画质。避免使用 Canva 的 AI 功能（会被标记）。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q35</span>：怎么录游戏视频和截图？</div>
-    <div class="a"><p>使用手机自带录屏，手动编辑（推荐 ibisPaint 等）。避免完全依赖 AI 增强工具。</p></div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q36</span>：2026年7月新激励规则概要</div>
-    <div class="a">
-      <ul>
-        <li>🎥 视频门槛降低 — TikTok/YouTube 200/400 views 即可有积分</li>
-        <li>📈 月积分上限提高至 40 分</li>
-        <li>🎁 连续创作奖励保留</li>
-        <li>🚀 新增创作者计划（推荐、新手、等级）</li>
-        <li>🎀 周边礼包新老创作者都有</li>
-      </ul>
-      <p><span class="tag source">#reward-rules（lishahongyu 公告）</span></p>
-    </div>
-  </div>
-</div>
-
-<!-- 客服流程 -->
-<div class="section">
-  <div class="section-title"><span class="stag ssr">SSR</span> 🤖 客服自助排查流程</div>
-  <div class="flow-box">
-收到 KOC 提问 →<br>
-├── 入门类（Q1-Q4）→ 直接回复<br>
-├── 创作类（Q5-Q8）→ 检查内容 + hashtag 规则<br>
-├── 提交类（Q9-Q12）→ 检查链接 + 审核周期<br>
-├── 积分/奖励（Q13-Q20）→ 查结算周期<br>
-├── 连续奖励（Q21-Q22）→ 确认连续5天还是15条<br>
-├── 链接问题（Q23-Q25）→ 确认账号公开<br>
-├── Reddit（Q26-Q27）→ 确认是 7 月后发布<br>
-├── 推荐/等级（Q28-Q29）→ 确认新规则<br>
-└── 其他 → 转运营负责人
-  </div>
-</div>
-
-
-<!-- 十一、常见问题（来自客服私信） -->
-<div class="section">
-  <div class="section-title">💬 十一、客服常见私信问题</div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q37</span>：Hashtag 是强制要求的吗？Reddit 需要加 hashtag 吗？</div>
-    <div class="a">
-      <p>创作灵感文档中列出的 hashtag 只是建议，使用它们有助于内容获得更多曝光。</p>
-      <p>✅ Facebook 官方群组发的帖子 <strong>需要</strong> 加官方 hashtag <strong>#myleisuretime</strong></p>
-      <p>✅ Reddit <strong>不需要</strong> hashtag（Reddit 不支持 hashtag）</p>
-      <p><span class="tag source">客服私信 06/24</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q38</span>：视频内容只能发在 TikTok 吗？Instagram Reels 算吗？</div>
-    <div class="a">
-      <p>视频 <strong>不包括</strong> Instagram Reels。如果你想提交视频内容，请发到 <strong>TikTok 或 YouTube</strong> 上。</p>
-      <p>在 TikTok 和 YouTube 上积累播放量比在 Instagram 上积累互动量更容易获得积分。</p>
-      <p><span class="tag source">客服私信 06/24</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q39</span>：同一个作品可以发多个平台吗？怎么算？</div>
-    <div class="a">
-      <p>✅ <strong>可以。</strong> 一份原创内容分发到不同平台，每个平台都算独立提交。</p>
-      <p>一个作品在不同平台发布算 <strong>两次提交</strong>，不管是图文还是视频。</p>
-      <p><span class="tag source">客服私信 06/24</span> <span class="tag new">7月新规则</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q40</span>：积分可以攒着不兑换吗？会过期吗？</div>
-    <div class="a">
-      <p>✅ <strong>可以。</strong> 积分可以一直累积，<strong>没有过期时间</strong>。</p>
-      <p>兑换部分积分后，剩余积分会保留在账户里。你想攒多久都行。</p>
-      <p><span class="tag source">客服私信 07/03</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q41</span>：TikTok 和 Instagram 的积分计算方式一样吗？</div>
-    <div class="a">
-      <p><strong>不一样。</strong> 平台按不同指标计算积分：</p>
-      <table>
-        <tr><th>平台</th><th>积分指标</th></tr>
-        <tr><td>TikTok</td><td>📊 播放量（Views）</td></tr>
-        <tr><td>YouTube</td><td>📊 播放量（Views）</td></tr>
-        <tr><td>Instagram</td><td>💬 互动量（Engagement）</td></tr>
-        <tr><td>Facebook</td><td>💬 互动量（Engagement）</td></tr>
-        <tr><td>Reddit</td><td>💬 互动量（Engagement）</td></tr>
-      </table>
-      <p><span class="tag source">客服私信 07/03</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q42</span>：连续创作奖励需要每条都达到 40 互动吗？</div>
-    <div class="a">
-      <p><strong>不需要。</strong> 连续创作奖励（15条/月）只要求提交 15 条合格内容。</p>
-      <p>单条内容 <strong>不需要</strong> 达到 40 互动门槛也能计入连续创作奖励。6 月的连续创作奖同样适用此规则。</p>
-      <p><span class="tag source">客服私信 06/28</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q43</span>：长期没发内容会被踢吗？还能恢复吗？</div>
-    <div class="a">
-      <p>没有强制踢出机制。如果太久没发内容可以联系管理员恢复。</p>
-      <p>每月 28 号会在 📢｜yoyo-bulletin-board 频道发布 <strong>Google Form</strong>，填写所有内容链接即可重新参与。</p>
-      <p><span class="tag source">客服私信 06/25</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q44</span>：奖品配送需要提供什么信息？</div>
-    <div class="a">
-      <p>需要提供以下完整信息（我们从中国发货，清关需要）：</p>
-      <ul>
-        <li>📌 全名（法律姓名，用于清关）</li>
-        <li>📌 街道地址（含公寓/单元号）</li>
-        <li>📌 城市、州/省、邮编</li>
-        <li>📌 国家</li>
-        <li>📌 联系电话</li>
-      </ul>
-      <p>缺少任何一项都会导致无法发货。</p>
-      <p><span class="tag source">客服私信 06/25-30</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q45</span>：游戏奖励发到哪个服务器？有什么区别？</div>
-    <div class="a">
-      <p>有两个服务器可选，请选一个：</p>
-      <table>
-        <tr><th>服务器</th><th>说明</th></tr>
-        <tr><td>🔹 Beacon Server</td><td>抢先体验服，内容比正式服早发布</td></tr>
-        <tr><td>🔹 Official Server</td><td>正式服务器</td></tr>
-      </table>
-      <p>选择会影响你的游戏内奖励发放，请谨慎选择。</p>
-      <p><span class="tag source">客服私信 06/23</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q46</span>：Google Play 礼品卡可以买月卡吗？</div>
-    <div class="a">
-      <p><strong>不可以。</strong> Google Play 礼品卡是充值到 Google 账户钱包的预付卡，是 Google 平台的通用支付方式。</p>
-      <p>它 <strong>不能</strong> 用于购买游戏的月卡会员。月卡需要使用其他支付方式。</p>
-      <p><span class="tag source">客服私信 06/23</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q47</span>："40 互动"的标准是总互动还是单条互动？</div>
-    <div class="a">
-      <p>是 <strong>单条帖子</strong> 达到 40 互动量就得 1 分。</p>
-      <p>⚠️ 之前翻译工具翻译错误，造成了误解。正确规则：</p>
-      <ul>
-        <li>单条帖子达到 40 互动量 = <strong>1 分</strong></li>
-        <li>最多累计 <strong>15 条帖子</strong></li>
-        <li>不需要每条都达到 40 才能被计入</li>
-      </ul>
-      <p><span class="tag correction">更正</span> <span class="tag source">客服私信 07/06</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q48</span>：新手加入有什么额外奖励？</div>
-    <div class="a">
-      <ul>
-        <li>🎉 7 月新手活动（New Creator Event）：总积分达到 5 分额外加 <strong>2 分</strong></li>
-        <li>👫 成功推荐朋友成为 KOC：额外积分</li>
-        <li>💡 推荐积分 <strong>不计入</strong> 每月 40 分上限</li>
-        <li>📅 别忘了参与 🎀｜refer-a-friend-program 频道的新手活动</li>
-      </ul>
-      <p><span class="tag new">2026年7月</span> <span class="tag source">客服私信 07/03-07</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q49</span>：我之前发的帖子算吗（加入前发的）？</div>
-    <div class="a">
-      <p><strong>算。</strong> 当月结算日前加入并提交了链接，该月的内容也算。</p>
-      <p><strong>示例：</strong> 7 月加入，6 月内容也有效，只要在 <strong>7 月 10 日前</strong> 提交 Google Form。</p>
-      <p><span class="tag source">客服私信 06/23-28</span></p>
-    </div>
-  </div>
-
-  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
-    <div class="q"><span class="q-num">Q50</span>：提交链接时为什么要复制链接？Google Form 怎么填？</div>
-    <div class="a">
-      <p>没有要求必须复制链接到 Discord。你只需要在 Google Form 里填上所有视频/帖子链接即可。</p>
-      <p>如果表单中有非必填项，可以跳过。但建议多发视频，门槛低容易得积分。</p>
-      <p><span class="tag source">客服私信 07/03</span></p>
-    </div>
-  </div>
-
-</div>
-
 <div class="footer">
 📎 v2.0 · 交叉验证 #yoyo-rules-faq #reward-rules #bulletin-board 等多频道官方信息源<br>
 ⚠️ 标注 📷 的内容来自截图<br>
@@ -860,3 +334,407 @@ hr{border:none;border-top:2px dashed var(--line);margin:24px 0}
 
 </body>
 </html>
+
+<script>
+var FD = [
+  {
+    "title": "📌 一、入门与加入",
+    "items": [
+      {
+        "id": "Q1",
+        "q": "Yoyo Creative Studio 是什么？",
+        "a": "<p>我们是欧美休闲游戏 <strong>My Leisure Time</strong> 的官方 KOC 创作者社群。通过创作 UGC 内容（图文/视频）推广游戏，获得奖励和游戏福利。</p>\n      <p><span class=\"tag source\">#reward-rules Q1</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q2",
+        "q": "谁能参加？",
+        "a": "<p>任何喜欢 My Leisure Time 的玩家都可以申请。目前主要面向欧美地区用户。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q3",
+        "q": "怎么加入？",
+        "a": "<ol>\n        <li>加入 Discord → 在 #welcome 阅读规则</li>\n        <li><strong>私信管理员（DM arissalee.）</strong> 提供：Discord ID、社交平台主页链接、国家/地区</li>\n        <li>管理员审核后分配角色</li>\n      </ol>\n      <p><span class=\"tag correction\">更正</span> 不需要在 #introduce 频道自我介绍。官方流程要求直接 DM 管理员。</p>\n      <p><span class=\"tag source\">#rules + #yoyo-bulletin-board</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q4",
+        "q": "有最低产出要求吗？没达到会被踢吗？",
+        "a": "<p>没有强制\"踢出\"机制。但<strong>连续 2 周无产出</strong>可能会被移除 KOC 角色。目前没有每月最低积分硬门槛。</p>\n      <p><span class=\"tag source\">#reward-rules Q4</span></p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "📝 二、内容创作要求",
+    "items": [
+      {
+        "id": "Q5",
+        "q": "要做什么类型的内容？",
+        "a": "<table>\n        <tr><th>平台</th><th>形式</th><th>要求</th></tr>\n        <tr><td>Instagram</td><td>图文贴 / Reels</td><td>公开账号</td></tr>\n        <tr><td>Facebook</td><td>图文贴 / 视频</td><td>个人主页或群组均可</td></tr>\n        <tr><td>TikTok</td><td>短视频</td><td>公开账号</td></tr>\n        <tr><td>YouTube</td><td>视频</td><td>🆕 7月起视频类纳入积分</td></tr>\n        <tr><td>Reddit</td><td>图文贴</td><td>🆕 7月新增</td></tr>\n      </table>\n      <p><span class=\"tag source\">#reward-rules Q6</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q6",
+        "q": "内容有什么要求？",
+        "a": "<ul>\n        <li>✅ 原创（不能搬运/抄袭）</li>\n        <li>✅ 清晰展示 MLT 游戏画面</li>\n        <li>✅ <strong>推荐</strong>带官方 hashtag <strong>#myleisuretime</strong></li>\n        <li>✅ 文字为英文</li>\n        <li>❌ 不能说\"paid promotion\"、\"I'm making money\"等</li>\n        <li>❌ <strong>禁止 AI 生成内容</strong> — Canva 魔法橡皮擦等 AI 功能可能被标记</li>\n      </ul>\n      <p><span class=\"tag source\">#yoyo-rules-faq Q1</span> <span class=\"tag correction\">修正</span></p>\n      <p><strong>Hashtag 政策：</strong> Facebook/TikTok/IG → 推荐加 #myleisuretime，<strong>不是必须</strong>。Reddit → 豁免。加 hashtag 的好处：帮助识别创作者账号 + 高质量加标签帖子优先获得官方流量助推。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q7",
+        "q": "一个作品可以发多个平台吗？",
+        "a": "<p><strong>可以，且每个平台都算独立作品。</strong> 同一平台重复发同一条内容 → 只计表现最好的一次。</p>\n      <p><span class=\"tag new\">2026年7月新规则</span> 跨平台同内容 = 独立计分（此前旧规则曾规定\"只算最佳平台\"）。</p>\n      <p><span class=\"tag source\">#yoyo-rules-faq Q3</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q8",
+        "q": "我可以宣传自己的 Instagram 账号吗？",
+        "a": "<p>可以在社群内分享，但建议以 MLT 游戏内容为主。</p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "📮 三、提交与审核",
+    "items": [
+      {
+        "id": "Q9",
+        "q": "内容发布后要做什么？",
+        "a": "<p>把链接发到 <strong>#🎨｜creators-exchange</strong> 频道，格式：<code>平台 | 链接 | 作品类型</code></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q10",
+        "q": "审核要多久？",
+        "a": "<p>通常在 24-48 小时内。高峰期可能延长到一周。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q11",
+        "q": "审核不通过的原因？",
+        "a": "<ul>\n        <li>❌ 链接打不开（隐私设置问题）</li>\n        <li>❌ 图片不清晰（Canva 导出质量问题）</li>\n        <li>❌ 内容与 MLT 无关</li>\n        <li>❌ 使用了 AI 生成/增强的内容</li>\n        <li>❌ 重复内容（同图多发）</li>\n      </ul>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q12",
+        "q": "我编辑/修改了已发布的内容，需要重新提交吗？",
+        "a": "<p>建议<strong>重新发布新帖</strong>而不是编辑旧帖。编辑过的帖子可能被 Discord 审核系统忽略。</p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "💰 四、奖励与结算",
+    "items": [
+      {
+        "id": "Q13",
+        "q": "积分（Points）怎么算？",
+        "a": "<p><strong>2026年7月新规则：</strong></p>\n      <table>\n        <tr><th>平台</th><th>视频评分</th><th>图文评分</th></tr>\n        <tr><td>TikTok 🎥</td><td>播放量 200 / 400 views</td><td>互动量</td></tr>\n        <tr><td>YouTube 🆕</td><td>播放量 200 / 400 views</td><td>—</td></tr>\n        <tr><td>Instagram</td><td>互动量</td><td>互动量</td></tr>\n        <tr><td>Facebook</td><td>互动量</td><td>互动量</td></tr>\n        <tr><td>Reddit 🆕</td><td>—</td><td>互动量</td></tr>\n      </table>\n      <p><span class=\"tag source\">#yoyo-rules-faq Q2</span> <span class=\"tag correction\">修正</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q14",
+        "q": "一个月多少积分算正常？",
+        "a": "<p>月度上限为 <strong>40 分</strong>。达到上限后不再累积，下月重置。具体平均分因人而异。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q15",
+        "q": "积分上限是多少？推荐奖励计入吗？",
+        "a": "<p><strong>每月最高 40 分，月初重置。</strong></p>\n      <p><span class=\"tag new\">推荐积分是额外的</span> — 不计入每月 40 分上限。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q16",
+        "q": "奖励有哪些？",
+        "a": "<table>\n        <tr><th>选项</th><th>说明</th></tr>\n        <tr><td>Google Play 礼品卡</td><td>2 分起兑</td></tr>\n        <tr><td>游戏钻石</td><td>2 分起兑（450钻石/2分）</td></tr>\n        <tr><td>Amazon 礼品卡</td><td>分值不等</td></tr>\n        <tr><td>📦 周边礼包 🆕</td><td>新老创作者均可获得</td></tr>\n      </table>\n      <p><span class=\"tag source\">#reward-rules（新激励规则）</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q17",
+        "q": "一个月可以兑换多次吗？",
+        "a": "<p>一个月只能兑换一次。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q18",
+        "q": "没用完的积分下月还在吗？",
+        "a": "<p><strong>在的。</strong> 积分按月累积，兑换后剩余积分保留，不重置。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q19",
+        "q": "什么时候结算？",
+        "a": "<ul>\n        <li>提交截止：每月最后一周周五</li>\n        <li>积分计算：次月第 1-2 周周一至周二</li>\n        <li>奖励发放：次月第 2-3 周</li>\n      </ul>\n      <p><span class=\"tag source\">#reward-rules Q8</span> <span class=\"tag warn\">📷 具体日程表见 #reward-rules 频道图片</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q20",
+        "q": "最低多少积分能兑换？",
+        "a": "<p>最低 <strong>2 分</strong> 起兑。</p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "🏆 五、连续创作奖励",
+    "items": [
+      {
+        "id": "Q21",
+        "q": "连续 5 天发布奖励",
+        "a": "<ul>\n        <li>需要在同一个月内 <strong>连续 5 天</strong> 各发布至少 1 条内容</li>\n        <li>不需要在同个平台 — 跨平台合计</li>\n        <li>不需要每条都有积分 — 低互动也计</li>\n        <li>❌ 不要为了凑天数发低质量内容 — 会影响账号表现</li>\n      </ul>\n      <p><span class=\"tag correction\">⚠️ 重要更正</span> v1 版写的是\"不需要连续5天\"，<strong>是错误的</strong>。官方要求\"连续5天每天发\"（Post for 5 straight days）。</p>\n      <p><span class=\"tag source\">#yoyo-rules-faq Q1（连续创作奖励）</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q22",
+        "q": "连续创作奖（15 条/月）",
+        "a": "<ul>\n        <li>所有类型的创作内容都合格</li>\n        <li>多个平台的提交可以合计计数</li>\n        <li>常规积分 + 创作奖励 <strong>叠加发放</strong></li>\n      </ul>\n      <p><span class=\"tag source\">#yoyo-rules-faq Q1</span></p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "🔗 六、链接与发布",
+    "items": [
+      {
+        "id": "Q23",
+        "q": "帖子必须发在个人主页吗？",
+        "a": "<p>Facebook 个人主页或群组（如 My Leisure Time Global 群组），<strong>两者都算数</strong>。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q24",
+        "q": "分享链接打不开怎么办？",
+        "a": "<p>检查账号是否公开 → 重新复制链接 → 内容被删除则重新发布</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q25",
+        "q": "同一个内容重复发布怎么算？",
+        "a": "<p>同一平台重发 → 只计表现最好的一次。不同平台 → 各算各的（2026年7月新规则）。</p>\n      <p><span class=\"tag source\">#yoyo-rules-faq Q3</span></p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "🆕 七、Reddit（2026年7月新增）",
+    "items": [
+      {
+        "id": "Q26",
+        "q": "Reddit 现在也算吗？",
+        "a": "<p>是的，7 月起 Reddit 帖子计入积分。目前仅统计 7 月及之后的发帖。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q27",
+        "q": "在 Reddit 发什么内容？",
+        "a": "<p>分享 MLT 游戏内容、设计展示、游戏体验等。需发布在公开社区。</p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "🎁 八、推荐奖励",
+    "items": [
+      {
+        "id": "Q28",
+        "q": "推荐朋友加入有奖励吗？",
+        "a": "<p>✅ 成功推荐朋友成为 KOC 后可获得额外积分。推荐积分<strong>不计入每月 40 分上限</strong>。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q29",
+        "q": "2026年7月新增了哪些创作者计划？",
+        "a": "<ul>\n        <li>🎀 Refer-a-Friend 推荐计划</li>\n        <li>🌟 New Creator Event 新手活动</li>\n        <li>⭐ Creator Tier System 创作者等级系统</li>\n      </ul>\n      <p><span class=\"tag source\">#reward-rules（新激励规则）</span></p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "📋 九、社群规则",
+    "items": [
+      {
+        "id": "Q30",
+        "q": "Discord 里可以发什么？",
+        "a": "<ul>\n        <li>✅ 作品分享 · 创作交流 · 游戏讨论</li>\n        <li>✅ 设计技巧分享（如无障碍设计、创意搭建）</li>\n        <li>❌ 广告/第三方推广 · 刷屏/人身攻击</li>\n      </ul>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q31",
+        "q": "有问题找谁？",
+        "a": "<p>内容审核 → #creators-exchange · 奖励结算 → DM 管理员</p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "❓ 十、其他",
+    "items": [
+      {
+        "id": "Q32",
+        "q": "我以前发的帖子算吗？",
+        "a": "<p><strong>如果当月的结算日前加入并提交了链接，该月的内容也算。</strong></p>\n      <p>示例：7 月加入，6 月内容也有效，只要在 <strong>7月10日前</strong> 提交 Google Form。</p>\n      <p><span class=\"tag correction\">更正</span> v1 写的是\"加入后开始算\"，实际上当月及上个月的内容都可能计入。</p>\n      <p><span class=\"tag source\">#yoyo-rules-faq Q2</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q33",
+        "q": "新手有没有额外奖励？",
+        "a": "<p>有。New Creator Event 新手活动，首月可能有额外积分。具体见最新公告。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q34",
+        "q": "Canva 导出图片不清晰怎么办？",
+        "a": "<p>导出选最高画质。避免使用 Canva 的 AI 功能（会被标记）。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q35",
+        "q": "怎么录游戏视频和截图？",
+        "a": "<p>使用手机自带录屏，手动编辑（推荐 ibisPaint 等）。避免完全依赖 AI 增强工具。</p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q36",
+        "q": "2026年7月新激励规则概要",
+        "a": "<ul>\n        <li>🎥 视频门槛降低 — TikTok/YouTube 200/400 views 即可有积分</li>\n        <li>📈 月积分上限提高至 40 分</li>\n        <li>🎁 连续创作奖励保留</li>\n        <li>🚀 新增创作者计划（推荐、新手、等级）</li>\n        <li>🎀 周边礼包新老创作者都有</li>\n      </ul>\n      <p><span class=\"tag source\">#reward-rules（lishahongyu 公告）</span></p>",
+        "rarity": "r"
+      }
+    ]
+  },
+  {
+    "title": "💬 十一、客服常见私信问题",
+    "items": [
+      {
+        "id": "Q37",
+        "q": "Hashtag 是强制要求的吗？Reddit 需要加 hashtag 吗？",
+        "a": "<p>创作灵感文档中列出的 hashtag 只是建议，使用它们有助于内容获得更多曝光。</p>\n      <p>✅ Facebook 官方群组发的帖子 <strong>需要</strong> 加官方 hashtag <strong>#myleisuretime</strong></p>\n      <p>✅ Reddit <strong>不需要</strong> hashtag（Reddit 不支持 hashtag）</p>\n      <p><span class=\"tag source\">客服私信 06/24</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q38",
+        "q": "视频内容只能发在 TikTok 吗？Instagram Reels 算吗？",
+        "a": "<p>视频 <strong>不包括</strong> Instagram Reels。如果你想提交视频内容，请发到 <strong>TikTok 或 YouTube</strong> 上。</p>\n      <p>在 TikTok 和 YouTube 上积累播放量比在 Instagram 上积累互动量更容易获得积分。</p>\n      <p><span class=\"tag source\">客服私信 06/24</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q39",
+        "q": "同一个作品可以发多个平台吗？怎么算？",
+        "a": "<p>✅ <strong>可以。</strong> 一份原创内容分发到不同平台，每个平台都算独立提交。</p>\n      <p>一个作品在不同平台发布算 <strong>两次提交</strong>，不管是图文还是视频。</p>\n      <p><span class=\"tag source\">客服私信 06/24</span> <span class=\"tag new\">7月新规则</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q40",
+        "q": "积分可以攒着不兑换吗？会过期吗？",
+        "a": "<p>✅ <strong>可以。</strong> 积分可以一直累积，<strong>没有过期时间</strong>。</p>\n      <p>兑换部分积分后，剩余积分会保留在账户里。你想攒多久都行。</p>\n      <p><span class=\"tag source\">客服私信 07/03</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q41",
+        "q": "TikTok 和 Instagram 的积分计算方式一样吗？",
+        "a": "<p><strong>不一样。</strong> 平台按不同指标计算积分：</p>\n      <table>\n        <tr><th>平台</th><th>积分指标</th></tr>\n        <tr><td>TikTok</td><td>📊 播放量（Views）</td></tr>\n        <tr><td>YouTube</td><td>📊 播放量（Views）</td></tr>\n        <tr><td>Instagram</td><td>💬 互动量（Engagement）</td></tr>\n        <tr><td>Facebook</td><td>💬 互动量（Engagement）</td></tr>\n        <tr><td>Reddit</td><td>💬 互动量（Engagement）</td></tr>\n      </table>\n      <p><span class=\"tag source\">客服私信 07/03</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q42",
+        "q": "连续创作奖励需要每条都达到 40 互动吗？",
+        "a": "<p><strong>不需要。</strong> 连续创作奖励（15条/月）只要求提交 15 条合格内容。</p>\n      <p>单条内容 <strong>不需要</strong> 达到 40 互动门槛也能计入连续创作奖励。6 月的连续创作奖同样适用此规则。</p>\n      <p><span class=\"tag source\">客服私信 06/28</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q43",
+        "q": "长期没发内容会被踢吗？还能恢复吗？",
+        "a": "<p>没有强制踢出机制。如果太久没发内容可以联系管理员恢复。</p>\n      <p>每月 28 号会在 📢｜yoyo-bulletin-board 频道发布 <strong>Google Form</strong>，填写所有内容链接即可重新参与。</p>\n      <p><span class=\"tag source\">客服私信 06/25</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q44",
+        "q": "奖品配送需要提供什么信息？",
+        "a": "<p>需要提供以下完整信息（我们从中国发货，清关需要）：</p>\n      <ul>\n        <li>📌 全名（法律姓名，用于清关）</li>\n        <li>📌 街道地址（含公寓/单元号）</li>\n        <li>📌 城市、州/省、邮编</li>\n        <li>📌 国家</li>\n        <li>📌 联系电话</li>\n      </ul>\n      <p>缺少任何一项都会导致无法发货。</p>\n      <p><span class=\"tag source\">客服私信 06/25-30</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q45",
+        "q": "游戏奖励发到哪个服务器？有什么区别？",
+        "a": "<p>有两个服务器可选，请选一个：</p>\n      <table>\n        <tr><th>服务器</th><th>说明</th></tr>\n        <tr><td>🔹 Beacon Server</td><td>抢先体验服，内容比正式服早发布</td></tr>\n        <tr><td>🔹 Official Server</td><td>正式服务器</td></tr>\n      </table>\n      <p>选择会影响你的游戏内奖励发放，请谨慎选择。</p>\n      <p><span class=\"tag source\">客服私信 06/23</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q46",
+        "q": "Google Play 礼品卡可以买月卡吗？",
+        "a": "<p><strong>不可以。</strong> Google Play 礼品卡是充值到 Google 账户钱包的预付卡，是 Google 平台的通用支付方式。</p>\n      <p>它 <strong>不能</strong> 用于购买游戏的月卡会员。月卡需要使用其他支付方式。</p>\n      <p><span class=\"tag source\">客服私信 06/23</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q47",
+        "q": "\"40 互动\"的标准是总互动还是单条互动？",
+        "a": "<p>是 <strong>单条帖子</strong> 达到 40 互动量就得 1 分。</p>\n      <p>⚠️ 之前翻译工具翻译错误，造成了误解。正确规则：</p>\n      <ul>\n        <li>单条帖子达到 40 互动量 = <strong>1 分</strong></li>\n        <li>最多累计 <strong>15 条帖子</strong></li>\n        <li>不需要每条都达到 40 才能被计入</li>\n      </ul>\n      <p><span class=\"tag correction\">更正</span> <span class=\"tag source\">客服私信 07/06</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q48",
+        "q": "新手加入有什么额外奖励？",
+        "a": "<ul>\n        <li>🎉 7 月新手活动（New Creator Event）：总积分达到 5 分额外加 <strong>2 分</strong></li>\n        <li>👫 成功推荐朋友成为 KOC：额外积分</li>\n        <li>💡 推荐积分 <strong>不计入</strong> 每月 40 分上限</li>\n        <li>📅 别忘了参与 🎀｜refer-a-friend-program 频道的新手活动</li>\n      </ul>\n      <p><span class=\"tag new\">2026年7月</span> <span class=\"tag source\">客服私信 07/03-07</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q49",
+        "q": "我之前发的帖子算吗（加入前发的）？",
+        "a": "<p><strong>算。</strong> 当月结算日前加入并提交了链接，该月的内容也算。</p>\n      <p><strong>示例：</strong> 7 月加入，6 月内容也有效，只要在 <strong>7 月 10 日前</strong> 提交 Google Form。</p>\n      <p><span class=\"tag source\">客服私信 06/23-28</span></p>",
+        "rarity": "r"
+      },
+      {
+        "id": "Q50",
+        "q": "提交链接时为什么要复制链接？Google Form 怎么填？",
+        "a": "<p>没有要求必须复制链接到 Discord。你只需要在 Google Form 里填上所有视频/帖子链接即可。</p>\n      <p>如果表单中有非必填项，可以跳过。但建议多发视频，门槛低容易得积分。</p>\n      <p><span class=\"tag source\">客服私信 07/03</span></p>",
+        "rarity": "r"
+      }
+    ]
+  }
+];
+function rf(){
+  var c=document.getElementById('faqContainer');if(!c)return;
+  var h='';
+  FD.forEach(function(s,si){
+    var sr='R',a=s.items.some(function(i){return i.rarity==='ssr';}),b=s.items.some(function(i){return i.rarity==='sr';});
+    if(a)sr='SSR';else if(b)sr='SR';
+    h+='<div class="section" data-si="'+si+'">';
+    h+='<div class="section-title"><span class="stag '+sr.toLowerCase()+'">'+sr+'</span> '+s.title+'</div>';
+    s.items.forEach(function(it,ii){
+      h+='<div class="q-item rarity-'+it.rarity+'" data-idx="'+si+'-'+ii+'">';
+      h+='<span class="rarity-badge '+it.rarity+'">'+it.rarity.toUpperCase()+'</span>';
+      h+='<div class="q"><span class="q-num">'+it.id+'</span>\uff1a'+it.q+'</div>';
+      h+='<button class="copy-btn" onclick="cf(this)">\ud83d\udccb</button>';
+      h+='<div class="a">'+it.a+'</div></div>';
+    });h+='</div>';
+  });c.innerHTML=h;bs();
+}
+function cf(b){
+  var a=b.nextElementSibling;if(!a||!a.classList.contains('a'))a=b.closest('.q-item').querySelector('.a');
+  var t=a?a.innerText.trim():'';if(!t)return;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){b.textContent='\u2705';b.classList.add('copied');setTimeout(function(){b.textContent='\ud83d\udccb';b.classList.remove('copied');},1200);});
+  }else{
+    var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.left='-9999px';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    b.textContent='\u2705';b.classList.add('copied');setTimeout(function(){b.textContent='\ud83d\udccb';b.classList.remove('copied');},1200);
+  }
+}
+function bs(){
+  var i=document.getElementById('searchInput'),s=document.getElementById('suggestBox'),cb=document.getElementById('clearBtn'),ce=document.getElementById('searchCount');
+  if(!i)return;var ai=[];
+  document.querySelectorAll('.q-item').forEach(function(el){var q=(el.querySelector('.q')?.textContent||'').trim(),a=(el.querySelector('.a')?.textContent||'').trim(),sc=el.closest('.section'),st=sc?(sc.querySelector('.section-title')?.textContent||'').trim():'';ai.push({el:el,section:sc,q:q,a:a,sectionTitle:st});});
+  function ds(kw){var t=(kw||'').trim().toLowerCase(),h=t.length>0,w=t.split(/[\s,，]+/).filter(Boolean),mc=0;ai.forEach(function(it){var ql=it.q.toLowerCase(),al=it.a.toLowerCase(),ma=w.length===0||w.every(function(w){return ql.indexOf(w)>=0||al.indexOf(w)>=0;});it.el.classList.toggle('hide',h&&!ma);if(ma&&h)mc++;});document.querySelectorAll('.section').forEach(function(sc){var v=false;sc.querySelectorAll('.q-item').forEach(function(qi){if(!qi.classList.contains('hide'))v=true;});sc.classList.toggle('hide',h&&!v);});if(cb)cb.style.display=h?'block':'none';if(h){ce.textContent=mc+' / '+ai.length+' \u4e2a\u95ee\u9898\u5339\u914d';ce.style.display='block';}else{ce.style.display='none';}}
+  function bs2(kw){var t=(kw||'').trim().toLowerCase();if(t.length<1){s.style.display='none';return;}var w=t.split(/[\s,，]+/).filter(Boolean);if(w.length===0){s.style.display='none';return;}var sc=[];ai.forEach(function(it,idx){var ql=it.q.toLowerCase(),al=it.a.toLowerCase(),score=0,mw=[];w.forEach(function(w){if(ql.indexOf(w)>=0){score+=10;mw.push(w);}if((it.sectionTitle||'').toLowerCase().indexOf(w)>=0){score+=5;mw.push(w);}if(al.indexOf(w)>=0){score+=3;mw.push(w);}});if(score>0&&mw.length>0)sc.push({idx:idx,score:score,matched:mw});});sc.sort(function(a,b){return b.score-a.score;});var top=sc.slice(0,8),html='';if(top.length===0)html='<div class="s-empty">\u6ca1\u6709\u5339\u914d\u7684\u95ee\u9898</div>';else top.forEach(function(s){var it=ai[s.idx],st=(it.sectionTitle||'').replace(/^\S+/,'').trim().substring(0,6),sn=it.q.length>40?it.q.substring(0,40)+'...':it.q,hl=sn;s.matched.forEach(function(w){var re=new RegExp('('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');hl=hl.replace(re,'<span class="s-match">$1</span>');});html+='<div class="s-item" data-idx="'+s.idx+'"><span class="s-badge">'+(st||'FAQ')+'</span><span>'+hl+'</span></div>';});s.innerHTML=html;s.style.display='block';s.querySelectorAll('.s-item').forEach(function(el){el.addEventListener('click',function(){var idx=parseInt(el.getAttribute('data-idx'));if(isNaN(idx)||!ai[idx])return;ai[idx].el.scrollIntoView({behavior:'smooth',block:'center'});ai[idx].el.style.background='#FDE3EC';setTimeout(function(){ai[idx].el.style.background='';},1500);s.style.display='none';});});}
+  var dt=null;i.addEventListener('input',function(){clearTimeout(dt);dt=setTimeout(function(){ds(i.value);bs2(i.value);},150);});
+  i.addEventListener('focus',function(){if(i.value.trim().length>0)bs2(i.value);});
+  document.addEventListener('click',function(e){if(!i.contains(e.target)&&!s.contains(e.target))s.style.display='none';});
+  i.addEventListener('keydown',function(e){if(e.key==='Escape'){s.style.display='none';i.blur();}});
+  window.clearSearch=function(){i.value='';ds('');s.style.display='none';i.focus();};
+}
+document.addEventListener('contextmenu',function(e){if(!e.target.closest('input')){e.preventDefault();return false;}});
+document.addEventListener('keydown',function(e){if(e.key==='F12'||e.key==='PrintScreen'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&e.key==='u')){e.preventDefault();return false;}});
+(function(){var wm=document.createElement('div');wm.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.025;font-family:var(--mono);font-size:8px;color:var(--rose);overflow:hidden;display:flex;flex-wrap:wrap;align-content:flex-start;padding:20px;letter-spacing:1em;line-height:4';var txt='';for(var i=0;i<60;i++)txt+='YOYO\u00b7CONFIDENTIAL\u00b7';wm.textContent=txt;document.body.appendChild(wm);setInterval(function(){var w=window.outerWidth-window.innerWidth>160,h=window.outerHeight-window.innerHeight>160;if(w||h)document.body.style.opacity='0.06';},2000);})();
+rf();
+</script>
