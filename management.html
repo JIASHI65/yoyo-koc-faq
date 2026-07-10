@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOC 管理面板 · Yoyo Creative Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF3F6;--card:#FFFBF7;--ink:#43263E;--ink-soft:#7A5C74;--rose:#F2618C;--lav:#8E6FD8;--mint:#39B79B;--gold:#F0A93B;--line:#F3D9E2;--radius:20px;--disp:'Baloo 2','Noto Sans SC',sans-serif;--body:'Noto Sans SC',sans-serif;--mono:'Space Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.7;font-size:14px;background-image:radial-gradient(circle at 15% 20%,rgba(142,111,216,.06)0,transparent 40%),radial-gradient(circle at 85% 70%,rgba(242,97,140,.07)0,transparent 45%)}
+a{color:var(--rose);text-decoration:none}
+:focus-visible{outline:3px solid var(--lav);outline-offset:3px;border-radius:6px}
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(255,243,246,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px;overflow-x:auto}
+.logo{font-family:var(--disp);font-weight:800;font-size:16px;white-space:nowrap}
+.logo b{color:var(--rose)}
+.nav-tabs{display:flex;gap:4px;margin-left:14px}
+.nav-tab{padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid transparent;transition:.12s;color:var(--ink-soft);background:transparent}
+.nav-tab:hover{background:rgba(242,97,140,.06);color:var(--ink)}
+.nav-tab.active{background:var(--rose);color:#fff;border-color:var(--rose);box-shadow:2px 2px 0 rgba(67,38,62,.1)}
+.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.data-status{font-family:var(--mono);font-size:9px;color:var(--mint);letter-spacing:.05em}
+/* MAIN */
+.main{max-width:1200px;margin:0 auto;padding:20px;display:none}
+.main.active{display:block}
+/* CARDS */
+.card{background:var(--card);border:1.5px solid var(--ink);border-radius:var(--radius);padding:18px 20px;box-shadow:3px 3px 0 rgba(67,38,62,.08);margin-bottom:16px}
+.card-title{font-family:var(--disp);font-weight:700;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+/* STATS GRID */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--card);border:1.5px solid var(--ink);border-radius:16px;padding:16px;box-shadow:2px 2px 0 rgba(67,38,62,.06);text-align:center}
+.stat .num{font-family:var(--disp);font-size:28px;font-weight:800;color:var(--rose)}
+.stat .lab{font-size:11px;color:var(--ink-soft);margin-top:2px}
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+td,th{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:#FDE3EC;font-weight:700;font-size:11.5px;position:sticky;top:0;z-index:1}
+tr:hover{background:rgba(242,97,140,.03)}
+/* FORMS */
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.form-group{display:flex;flex-direction:column;gap:3px}
+.form-group label{font-size:11px;font-weight:700;color:var(--ink-soft)}
+input,select,textarea{padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-family:var(--body);color:var(--ink);background:var(--card);transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--rose);outline:none;box-shadow:0 0 0 3px rgba(242,97,140,.08)}
+textarea{resize:vertical;min-height:60px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--disp);font-weight:700;font-size:12px;padding:7px 16px;border-radius:10px;border:1.5px solid var(--ink);cursor:pointer;transition:transform .1s,box-shadow .1s;box-shadow:2px 2px 0 rgba(67,38,62,.08);background:var(--card);color:var(--ink)}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 rgba(67,38,62,.1)}
+.btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0}
+.btn-primary{background:var(--rose);color:#fff;border-color:var(--rose)}
+.btn-sm{padding:4px 10px;font-size:11px;border-radius:8px}
+.btn-danger{background:#FDE3EC;color:#B23A62;border-color:#E8B4C3}
+.btn-success{background:#DFF4EE;color:#1F7A66;border-color:#A8D5C8}
+/* TAGS */
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:999px;font-weight:700;letter-spacing:.03em;border:1px solid}
+.tag.active{background:#DFF4EE;color:#1F7A66;border-color:#A8D5C8}
+.tag.inactive{background:#FDE3EC;color:#B23A62;border-color:#E8B4C3}
+.tag.lost{background:#EDE6FB;color:#5F44A8;border-color:#C5B5E8}
+.tag.铂金{background:linear-gradient(135deg,#FCEBC9,#FDE3EC);color:#8F6B1A;border-color:var(--gold)}
+.tag.金{background:linear-gradient(135deg,#EDE6FB,#DFF4EE);color:#5F44A8;border-color:var(--lav)}
+.tag.认证{background:#F7EDF3;color:var(--ink-soft);border-color:var(--line)}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(67,38,62,.4);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border:2px solid var(--ink);border-radius:24px;padding:24px;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:8px 8px 0 rgba(67,38,62,.12)}
+.modal h2{font-family:var(--disp);font-size:18px;margin-bottom:14px}
+.modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink-soft);padding:0 4px}
+.modal-close:hover{color:var(--ink)}
+/* MONTHLY */
+.month-picker{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+/* POINTS */
+.points-badge{font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px}
+.points-badge.good{background:#DFF4EE;color:#1F7A66}
+.points-badge.med{background:#FCF0D4;color:#8F6B1A}
+.points-badge.low{background:#FDE3EC;color:#B23A62}
+/* SEARCH */
+.search-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.search-bar input{flex:1;min-width:180px}
+/* TEMPLATES */
+.template-item{border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.template-item h4{font-size:13px;margin-bottom:6px;color:var(--lav);font-family:var(--mono);letter-spacing:.05em}
+.template-item .tp-text{font-size:12px;color:var(--ink-soft);margin:4px 0;line-height:1.8;white-space:pre-wrap;word-break:break-word}
+/* UTILITY */
+.flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mt8{margin-top:8px}
+.mb8{margin-bottom:8px}
+.text-center{text-align:center}
+.text-muted{color:var(--ink-soft);font-size:12px}
+.empty{text-align:center;padding:32px;color:var(--ink-soft);font-size:14px}
+@media(max-width:700px){.nav-tabs{overflow-x:auto}.form-row{grid-template-columns:1fr}.main{padding:12px}.stats{grid-template-columns:repeat(2,1fr)}}
+/* toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 20px;border-radius:12px;font-size:13px;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none;font-family:var(--body);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <div class="logo">KOC<b>管理</b></div>
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-tab="dashboard">📊 仪表盘</button>
+      <button class="nav-tab" data-tab="creators">👥 创作者</button>
+      <button class="nav-tab" data-tab="monthly">📅 月度投稿</button>
+      <button class="nav-tab" data-tab="rewards">🎁 奖励</button>
+      <button class="nav-tab" data-tab="templates">💬 话术</button>
+      <button class="nav-tab" data-tab="settings">⚙️ 设置</button>
+    </div>
+    <div class="nav-right">
+      <span class="data-status" id="dataStatus">💾 已保存</span>
+    </div>
+  </div>
+</nav>
+
+<div class="main active" id="pageDashboard"></div>
+<div class="main" id="pageCreators"></div>
+<div class="main" id="pageMonthly"></div>
+<div class="main" id="pageRewards"></div>
+<div class="main" id="pageTemplates"></div>
+<div class="main" id="pageSettings"></div>
+
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DEMO DATA =====
+var DEFAULT_CREATORS = [{"id": "c1", "name": "Rowdy-Bones", "tier": "认证", "server": "正式服", "accountId": "6029639177058803968", "uid": "XUkeOAOOAhGh", "pointsBalance": 0, "region": "USA", "address": "1616 Voight Street, Sumner, Washington, 98390", "phone": "253-361-7241", "authHeating": true, "platform": "Instagram", "joinMonth": "2026-04", "status": "active", "notes": ""}, {"id": "c2", "name": "Achiru", "tier": "铂金", "server": "正式服", "accountId": "6029645020211177216", "uid": "JFZtAvyyYHsz", "pointsBalance": 60, "region": "加拿大", "address": "101-343 4 Ave NE, Calgary AB T2E0J4, Canada", "phone": "1-587-889-2630", "authHeating": true, "platform": "Facebook", "joinMonth": "2026-02", "status": "active", "notes": ""}, {"id": "c3", "name": "Janie", "tier": "铂金", "server": "灯塔服", "accountId": "6029660722812577024", "uid": "kZvpFabpEZnV", "pointsBalance": 1, "region": "USA", "address": "4934 N Hedgerow Ct, Bel Aire, KS 67220", "phone": "+1(316)821-5025", "authHeating": true, "platform": "Facebook", "joinMonth": "2026-02", "status": "active", "notes": ""}, {"id": "c4", "name": "𝕷𝖎𝖑", "tier": "认证", "server": "正式服", "accountId": "6029554998904023552", "uid": "cqbZpqmcXcCq", "pointsBalance": 8, "region": "USA", "address": "7 Rockford Road Apt G15, Wilmington, Delaware", "phone": "(302) 307-3483", "authHeating": true, "platform": "Facebook", "joinMonth": "2026-02", "status": "active", "notes": ""}, {"id": "c5", "name": "diana", "tier": "铂金", "server": "正式服", "accountId": "6029687610867767808", "uid": "FXgPxrqBgFtH", "pointsBalance": 20, "region": "Brazil", "address": "", "phone": "", "authHeating": false, "platform": "Instagram", "joinMonth": "2026-04", "status": "active", "notes": ""}, {"id": "c6", "name": "maished", "tier": "金", "server": "灯塔服", "accountId": "6029551811048939520", "uid": "BUpwbCmoMZQC", "pointsBalance": 6, "region": "USA", "address": "3108 Friars Walk Ln, Glen Allen, VA 23059", "phone": "", "authHeating": true, "platform": "Facebook", "joinMonth": "2026-02", "status": "active", "notes": ""}, {"id": "c7", "name": "taylor", "tier": "铂金", "server": "正式服", "accountId": "6029699506820002560", "uid": "sWMhfyVceZzm", "pointsBalance": 34, "region": "英国", "address": "", "phone": "", "authHeating": true, "platform": "Facebook", "joinMonth": "2026-04", "status": "active", "notes": ""}, {"id": "c8", "name": "Datuzu", "tier": "认证", "server": "灯塔服", "accountId": "6029547660617433344", "uid": "mQaUfKrvkcdp", "pointsBalance": 0, "region": "越南", "address": "18/90 Yen Lac St, Vinh Tuy, Hanoi, 11622", "phone": "(+84) 967640246", "authHeating": false, "platform": "Pinterest", "joinMonth": "2026-02", "status": "active", "notes": ""}];
+var DEFAULT_TEMPLATES = [{"id": "t1", "category": "积分通知", "chinese": "亲爱的设计师，你好呀！\n您的[月份]月积分计算已完成。\n获得积分：XX分\n持续创作奖：XX分\n总积分：XX分\n\n您可以选择兑换以下奖励：\n1 Point = 450 Diamonds", "english": "Dear Creator, hello!\n\nYour [Month] Point Calculation is complete.\nYou received: [points] Points\nConsistent Bonus: [bonus] Points\nTotal: [total] Points\n\nYou can redeem: 1 Point = 450 Diamonds"}, {"id": "t2", "category": "积分不足提醒", "chinese": "积分获取不仅需要投稿，还需要内容达到一定的热度标准（点赞评论转发量）。您可以将作品同步到更多平台，例如官方FB小组、TikTok等，或许能有更好的流量。", "english": "Earning points requires not only submitting content but also meeting certain engagement thresholds (likes, comments, shares). Try posting to more platforms like our official FB group or TikTok for better reach."}, {"id": "t3", "category": "奖励发放", "chinese": "亲爱的设计师这是您的谷歌礼品卡奖励，请注意查收~", "english": "Dear Designer, this is the Google Gift Card reward you redeemed — please check and claim it~"}, {"id": "t4", "category": "持续创作奖", "chinese": "持续创作奖将在所有设计师兑换完奖励后统一发放，请您耐心等待~", "english": "The Continuous Creation Bonus will be distributed after all designers have completed their reward redemption. Please wait patiently~"}, {"id": "t5", "category": "信息收集", "chinese": "亲爱的设计师，为了便于为您发放游戏内的奖励，需要您提供以下信息：\nServer（Beacon还是Official）:\nAccount ID:\nUID:", "english": "Dear Designer, to ensure your in-game rewards are delivered correctly, please provide:\nServer (Beacon or Official):\nAccount ID:\nUID:"}, {"id": "t6", "category": "失去资格", "chinese": "亲爱的设计师，您已经两个月没有投稿，已失去创作者资格。如果您想重新加入，欢迎随时联系。", "english": "Dear Designer, you haven't submitted any works for two months and have lost your creator qualification. If you'd like to rejoin, feel free to contact us anytime."}, {"id": "t7", "category": "链接回传提醒", "chinese": "本月积分正在计算中，请在每月5号前将作品链接提交到Google Form。", "english": "Monthly Point Calculation is in progress. Please submit your links to the Google Form before the 5th of each month."}, {"id": "t8", "category": "奖励已发放", "chinese": "亲爱的设计师！\n所有游戏内奖励（包括持续创作奖和积分兑换钻石）已通过游戏邮件发放，请及时领取~", "english": "Dear Creators!\nAll in-game rewards (including Continuous Creation Bonus and point-redeemed Diamonds) have been distributed via in-game mail. Please claim them in time~"}];
+var DEFAULT_SETTINGS = {"imageThreshold": 40, "imagePoints1": 1, "imageThreshold2": 80, "imagePoints2": 2, "videoThreshold1": 200, "videoPoints1": 1, "videoThreshold2": 400, "videoPoints2": 2, "monthlyCap": 40, "maxPosts": 15, "currencyName": "Points", "redemptionMin": 1};
+
+// ===== DB =====
+var DB = {
+  _data: null,
+  init: function() {
+    if (localStorage.getItem('koc_data')) {
+      this._data = JSON.parse(localStorage.getItem('koc_data'));
+    } else {
+      this._data = {
+        creators: JSON.parse(JSON.stringify(DEFAULT_CREATORS)),
+        submissions: [],
+        templates: JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)),
+        settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS))
+      };
+      this.save();
+    }
+  },
+  save: function() {
+    localStorage.setItem('koc_data', JSON.stringify(this._data));
+    document.getElementById('dataStatus').textContent = '💾 已保存 ' + new Date().toLocaleTimeString();
+  },
+  getCreators: function() { return this._data.creators; },
+  getSubmissions: function() { return this._data.submissions; },
+  getTemplates: function() { return this._data.templates; },
+  getSettings: function() { return this._data.settings; },
+  getCreator: function(id) { return this._data.creators.find(function(c) { return c.id === id; }); },
+  addCreator: function(c) { this._data.creators.push(c); this.save(); },
+  updateCreator: function(id, data) {
+    var idx = this._data.creators.findIndex(function(c) { return c.id === id; });
+    if (idx >= 0) { Object.assign(this._data.creators[idx], data); this.save(); }
+  },
+  deleteCreator: function(id) {
+    this._data.creators = this._data.creators.filter(function(c) { return c.id !== id; });
+    this.save();
+  },
+  getSubmissionsByMonth: function(month) {
+    return this._data.submissions.filter(function(s) { return s.month === month; });
+  },
+  addSubmission: function(s) { this._data.submissions.push(s); this.save(); },
+  updateSubmission: function(id, data) {
+    var idx = this._data.submissions.findIndex(function(s) { return s.id === id; });
+    if (idx >= 0) { Object.assign(this._data.submissions[idx], data); this.save(); }
+  },
+  deleteSubmission: function(id) {
+    this._data.submissions = this._data.submissions.filter(function(s) { return s.id !== id; });
+    this.save();
+  },
+  exportAll: function() { return JSON.stringify(this._data, null, 2); },
+  importAll: function(str) {
+    var d = JSON.parse(str);
+    if (d.creators && d.settings) {
+      this._data = d;
+      this.save();
+      return true;
+    }
+    return false;
+  },
+  backupToFile: function() {
+    var blob = new Blob([this.exportAll()], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'koc_backup_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+  }
+};
+
+// ===== UTILITY =====
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function toast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(function() { el.classList.remove('show'); }, 2200);
+}
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function getMonthStr() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+}
+function getMonthLabel(m) { return m ? m.slice(0,4) + '年' + parseInt(m.slice(5)) + '月' : ''; }
+
+// ===== POINTS CALC =====
+function calcImagePoints(engagement) {
+  var s = DB.getSettings();
+  if (!engagement || engagement < s.imageThreshold) return 0;
+  if (engagement >= s.imageThreshold2) return s.imagePoints2;
+  return s.imagePoints1;
+}
+function calcVideoPoints(views) {
+  var s = DB.getSettings();
+  if (!views || views < s.videoThreshold1) return 0;
+  if (views >= s.videoThreshold2) return s.videoPoints2;
+  return s.videoPoints1;
+}
+
+// ===== NAV =====
+document.getElementById('navTabs').addEventListener('click', function(e) {
+  var tab = e.target.closest('.nav-tab');
+  if (!tab) return;
+  document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.main').forEach(function(p) { p.classList.remove('active'); });
+  tab.classList.add('active');
+  var page = document.getElementById('page' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1));
+  if (page) { page.classList.add('active'); renderPage(tab.dataset.tab); }
+});
+
+// ===== MODAL =====
+var modalOverlay = document.getElementById('modalOverlay');
+function showModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  modalOverlay.classList.add('show');
+}
+function closeModal() { modalOverlay.classList.remove('show'); }
+modalOverlay.addEventListener('click', function(e) { if (e.target === modalOverlay) closeModal(); });
+
+// ===== RENDER PAGES =====
+function renderPage(page) {
+  if (page === 'dashboard') renderDashboard();
+  else if (page === 'creators') renderCreators();
+  else if (page === 'monthly') renderMonthly();
+  else if (page === 'rewards') renderRewards();
+  else if (page === 'templates') renderTemplates();
+  else if (page === 'settings') renderSettings();
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  var creators = DB.getCreators();
+  var subs = DB.getSubmissions();
+  var settings = DB.getSettings();
+  var active = creators.filter(function(c) { return c.status === 'active'; });
+  var currentMonth = getMonthStr();
+  var monthSubs = subs.filter(function(s) { return s.month === currentMonth; });
+  var totalPointsThisMonth = monthSubs.reduce(function(sum, s) { return sum + (s.totalPoints||0); }, 0);
+  var pendingRewards = subs.filter(function(s) { return s.rewardStatus === 'pending'; }).length;
+  var lost = creators.filter(function(c) { return c.status === 'lost'; }).length;
+
+  document.getElementById('pageDashboard').innerHTML = `
+    <div class="stats">
+      <div class="stat"><div class="num">${active.length}</div><div class="lab">活跃创作者</div></div>
+      <div class="stat"><div class="num" style="color:var(--lav)">${creators.length}</div><div class="lab">总创作者</div></div>
+      <div class="stat"><div class="num" style="color:var(--gold)">${currentMonth.slice(0,4)}年${parseInt(currentMonth.slice(5))}月</div><div class="lab">当前结算月</div></div>
+      <div class="stat"><div class="num" style="color:var(--mint)">${monthSubs.length}</div><div class="lab">本月已投稿人数</div></div>
+      <div class="stat"><div class="num">${totalPointsThisMonth}</div><div class="lab">本月总积分</div></div>
+      <div class="stat"><div class="num" style="color:${pendingRewards > 0 ? 'var(--gold)' : 'var(--mint)'}">${pendingRewards}</div><div class="lab">待发放奖励</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 活跃创作者 Top 10</div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>排名</th><th>名称</th><th>等级</th><th>积分余额</th><th>状态</th><th>操作</th></tr>
+          ${active.sort(function(a,b) { return (b.pointsBalance||0) - (a.pointsBalance||0); }).slice(0,10).map(function(c,i) { return `
+            <tr>
+              <td>${i+1}</td>
+              <td><strong>${escHtml(c.name)}</strong></td>
+              <td><span class="tag ${c.tier}">${c.tier}</span></td>
+              <td>${c.pointsBalance||0}</td>
+              <td><span class="tag ${c.status}">${c.status === 'active' ? '活跃' : c.status === 'inactive' ? '非活跃' : '失格'}</span></td>
+              <td><button class="btn btn-sm" onclick="editCreator('${c.id}')">编辑</button></td>
+            </tr>
+          `;}).join('')}
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ 快捷操作</div>
+      <div class="flex">
+        <button class="btn btn-primary" onclick="navigateTo('creators')">👥 管理创作者</button>
+        <button class="btn" onclick="navigateTo('monthly')">📅 录入本月投稿</button>
+        <button class="btn" onclick="navigateTo('rewards')">🎁 奖励发放</button>
+        <button class="btn" onclick="DB.backupToFile()">⬇️ 备份数据</button>
+      </div>
+    </div>
+  `;
+}
+
+function navigateTo(page) {
+  var tab = document.querySelector('[data-tab="' + page + '"]');
+  if (tab) tab.click();
+}
+
+// ===== CREATORS =====
+var creatorSearch = '';
+function renderCreators() {
+  var creators = DB.getCreators();
+  var kw = creatorSearch.toLowerCase();
+  var filtered = creators.filter(function(c) {
+    return !kw || c.name.toLowerCase().includes(kw) || (c.region||'').toLowerCase().includes(kw) || (c.accountId||'').includes(kw);
+  });
+
+  document.getElementById('pageCreators').innerHTML = `
+    <div class="card">
+      <div class="card-title">👥 创作者列表 <span class="text-muted">(${filtered.length}/${creators.length})</span></div>
+      <div class="search-bar">
+        <input type="text" placeholder="搜索名称 / 地区 / Account ID..." value="${escHtml(creatorSearch)}" oninput="creatorSearch=this.value;renderCreators()">
+        <button class="btn btn-primary" onclick="addCreator()">➕ 新增创作者</button>
+        <button class="btn" onclick="DB.backupToFile()">⬇️ 导出备份</button>
+        <button class="btn" onclick="document.getElementById('importFile').click()">📥 导入数据</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>名称</th><th>等级</th><th>区服</th><th>Account ID</th><th>UID</th><th>积分</th><th>地区</th><th>状态</th><th>操作</th></tr>
+          ${filtered.length === 0 ? '<tr><td colspan="9" class="empty">暂无数据</td></tr>' :
+          filtered.map(function(c) { return `
+            <tr>
+              <td><strong>${escHtml(c.name)}</strong></td>
+              <td><span class="tag ${c.tier}">${escHtml(c.tier)}</span></td>
+              <td>${escHtml(c.server||'-')}</td>
+              <td style="font-family:var(--mono);font-size:11px">${escHtml(c.accountId||'-')}</td>
+              <td style="font-family:var(--mono);font-size:11px">${escHtml(c.uid||'-')}</td>
+              <td><span class="points-badge ${(c.pointsBalance||0) >= 20 ? 'good' : (c.pointsBalance||0) >= 5 ? 'med' : 'low'}">${c.pointsBalance||0}</span></td>
+              <td>${escHtml(c.region||'-')}</td>
+              <td><span class="tag ${c.status}">${c.status === 'active' ? '活跃' : c.status === 'inactive' ? '非活跃' : '失格'}</span></td>
+              <td>
+                <button class="btn btn-sm" onclick="editCreator('${c.id}')">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteCreator('${c.id}')">删除</button>
+              </td>
+            </tr>
+          `;}).join('')}
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function addCreator() { showCreatorForm(null); }
+function editCreator(id) { showCreatorForm(id); }
+
+function showCreatorForm(id) {
+  var c = id ? DB.getCreator(id) : null;
+  var title = c ? '编辑创作者' : '新增创作者';
+  showModal(`
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>${title}</h2>
+    <form onsubmit="saveCreator(event,'${id||''}')">
+      <div class="form-row">
+        <div class="form-group"><label>名称 *</label><input name="name" value="${c?escHtml(c.name):''}" required></div>
+        <div class="form-group"><label>等级</label><select name="tier">
+          ${['认证','金','铂金'].map(function(t) { return '<option ' + ((c&&c.tier===t)?'selected':'') + '>' + t + '</option>'; }).join('')}
+        </select></div>
+        <div class="form-group"><label>区服</label><input name="server" value="${c?escHtml(c.server):''}" placeholder="正式服/灯塔服/Official/Beacon"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Account ID</label><input name="accountId" value="${c?escHtml(c.accountId):''}"></div>
+        <div class="form-group"><label>UID</label><input name="uid" value="${c?escHtml(c.uid):''}"></div>
+        <div class="form-group"><label>积分余额</label><input name="pointsBalance" type="number" value="${c?c.pointsBalance||0:0}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>地区</label><input name="region" value="${c?escHtml(c.region):''}" placeholder="USA / 英国 / 加拿大..."></div>
+        <div class="form-group"><label>电话</label><input name="phone" value="${c?escHtml(c.phone):''}"></div>
+        <div class="form-group"><label>状态</label><select name="status">
+          ${['active','inactive','lost'].map(function(s) { return '<option ' + ((c&&c.status===s)?'selected':'') + ' value="' + s + '">' + (s==='active'?'活跃':s==='inactive'?'非活跃':'失格') + '</option>'; }).join('')}
+        </select></div>
+      </div>
+      <div class="form-group"><label>地址</label><textarea name="address" rows="3">${c?escHtml(c.address):''}</textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>主要投稿平台</label><input name="platform" value="${c?escHtml(c.platform):''}" placeholder="Instagram / Facebook / TikTok..."></div>
+        <div class="form-group"><label>加热授权</label><select name="authHeating"><option value="true" ${c&&c.authHeating?'selected':''}>是</option><option value="false" ${!c||!c.authHeating?'selected':''}>否</option></select></div>
+        <div class="form-group"><label>加入月份</label><input name="joinMonth" type="month" value="${c?c.joinMonth:getMonthStr()}"></div>
+      </div>
+      <div class="form-group"><label>备注</label><textarea name="notes" rows="2">${c?escHtml(c.notes||''):''}</textarea></div>
+      <div class="flex mt8">
+        <button type="submit" class="btn btn-primary">💾 保存</button>
+        <button type="button" class="btn" onclick="closeModal()">取消</button>
+      </div>
+    </form>
+  `);
+}
+
+function saveCreator(e, id) {
+  e.preventDefault();
+  var data = Object.fromEntries(new FormData(e.target));
+  data.authHeating = data.authHeating === 'true';
+  data.pointsBalance = parseInt(data.pointsBalance) || 0;
+  if (id) {
+    DB.updateCreator(id, data);
+    toast('✅ 已更新');
+  } else {
+    data.id = uid();
+    DB.addCreator(data);
+    toast('✅ 已添加');
+  }
+  closeModal();
+  renderCreators();
+}
+
+function deleteCreator(id) {
+  if (!confirm('确定要删除这个创作者吗？')) return;
+  DB.deleteCreator(id);
+  renderCreators();
+  toast('已删除');
+}
+
+// ===== MONTHLY =====
+var selectedMonth = getMonthStr();
+function renderMonthly() {
+  var creators = DB.getCreators().filter(function(c) { return c.status === 'active'; });
+  var subs = DB.getSubmissionsByMonth(selectedMonth);
+  var settings = DB.getSettings();
+
+  document.getElementById('pageMonthly').innerHTML = `
+    <div class="card">
+      <div class="card-title">📅 月度投稿 · ${getMonthLabel(selectedMonth)}</div>
+      <div class="month-picker">
+        <input type="month" value="${selectedMonth}" onchange="selectedMonth=this.value;renderMonthly()">
+        <button class="btn btn-primary" onclick="addSubmission()">➕ 添加投稿</button>
+        <button class="btn" onclick="batchAddSubmissions()">📋 批量添加</button>
+        <span class="text-muted">已提交 ${subs.length} 人</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>创作者</th><th>链接数</th><th>图片分</th><th>视频分</th><th>总分</th><th>持续创作奖</th><th>奖励状态</th><th>操作</th></tr>
+          ${subs.length === 0 ? '<tr><td colspan="8" class="empty">本月暂无投稿记录</td></tr>' :
+          subs.map(function(s) {
+            var c = DB.getCreator(s.creatorId);
+            var name = c ? c.name : '(已删除)';
+            return '<tr><td><strong>' + escHtml(name) + '</strong></td><td>' + (s.links? s.links.length : 0) + '</td><td>' + (s.imagePoints||0) + '</td><td>' + (s.videoPoints||0) + '</td><td><strong>' + (s.totalPoints||0) + '</strong></td><td>' + (s.consistentBonus||0) + '</td><td><span class="tag ' + (s.rewardStatus === 'sent' ? 'active' : 'inactive') + '">' + (s.rewardStatus === 'sent' ? '已发放' : '待处理') + '</span></td><td><button class="btn btn-sm" onclick="editSubmission('' + s.id + '')">编辑</button> <button class="btn btn-sm btn-danger" onclick="deleteSubmission('' + s.id + '')">删除</button></td></tr>';
+          }).join('')}
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function addSubmission() { showSubmissionForm(null); }
+function editSubmission(id) { showSubmissionForm(id); }
+
+function showSubmissionForm(id) {
+  var s = id ? DB.getSubmissions().find(function(x) { return x.id === id; }) : null;
+  var creators = DB.getCreators().filter(function(c) { return c.status === 'active'; });
+  var title = s ? '编辑投稿' : '新增投稿';
+
+  var linksHtml = '';
+  if (s && s.links) {
+    linksHtml = s.links.map(function(l, i) { return `
+      <div class="form-row link-row" data-idx="${i}">
+        <div class="form-group" style="flex:2"><label>链接</label><input name="link_url_${i}" value="${escHtml(l.url)}" placeholder="https://..."></div>
+        <div class="form-group"><label>互动/播放</label><input name="link_engagement_${i}" type="number" value="${l.engagement||l.views||''}" placeholder="0"></div>
+        <div class="form-group"><label>类型</label><select name="link_type_${i}"><option value="image" ${l.type==='image'?'selected':''}>图文</option><option value="video" ${l.type==='video'?'selected':''}>视频</option></select></div>
+        <div class="form-group"><label>积分</label><input name="link_points_${i}" type="number" value="${l.points||0}" placeholder="自动"></div>
+        <div style="align-self:flex-end"><button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.link-row').remove()">×</button></div>
+      </div>
+    `; }).join('');
+  }
+
+  showModal(`
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>${title}</h2>
+    <form onsubmit="saveSubmission(event,'${id||''}')">
+      <div class="form-row">
+        <div class="form-group"><label>创作者 *</label><select name="creatorId" required>
+          ${creators.map(function(c) { return '<option value="' + c.id + '" ' + (s&&s.creatorId===c.id?'selected':'') + '>' + escHtml(c.name) + '</option>'; }).join('')}
+        </select></div>
+        <div class="form-group"><label>月份</label><input name="month" type="month" value="${s?s.month:selectedMonth}"></div>
+        <div class="form-group"><label>持续创作奖</label><input name="consistentBonus" type="number" value="${s?s.consistentBonus||0:0}"></div>
+      </div>
+      <div class="card-title" style="font-size:13px;margin:8px 0">🔗 作品链接</div>
+      <div id="linksContainer">
+        ${linksHtml || '<div class="form-row link-row" data-idx="0"><div class="form-group" style="flex:2"><label>链接</label><input name="link_url_0" placeholder="https://..."></div><div class="form-group"><label>互动/播放</label><input name="link_engagement_0" type="number" placeholder="0"></div><div class="form-group"><label>类型</label><select name="link_type_0"><option value="image">图文</option><option value="video">视频</option></select></div><div class="form-group"><label>积分</label><input name="link_points_0" type="number" placeholder="自动"></div></div>'}
+      </div>
+      <div class="flex mb8">
+        <button type="button" class="btn btn-sm" onclick="addLinkRow()">➕ 添加一行</button>
+        <button type="button" class="btn btn-sm" onclick="autoCalcPoints()">🧮 自动算分</button>
+      </div>
+      <div class="flex">
+        <button type="submit" class="btn btn-primary">💾 保存</button>
+        <button type="button" class="btn" onclick="closeModal()">取消</button>
+      </div>
+    </form>
+  `);
+  window._autoCalcLinks = function() { autoCalcPoints(); };
+}
+
+function addLinkRow() {
+  var container = document.getElementById('linksContainer');
+  var idx = container.children.length;
+  var div = document.createElement('div');
+  div.className = 'form-row link-row';
+  div.innerHTML = '<div class="form-group" style="flex:2"><label>链接</label><input name="link_url_' + idx + '" placeholder="https://..."></div><div class="form-group"><label>互动/播放</label><input name="link_engagement_' + idx + '" type="number" placeholder="0"></div><div class="form-group"><label>类型</label><select name="link_type_' + idx + '"><option value="image">图文</option><option value="video">视频</option></select></div><div class="form-group"><label>积分</label><input name="link_points_' + idx + '" type="number" placeholder="自动"></div><div style="align-self:flex-end"><button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.link-row').remove()">×</button></div>';
+  container.appendChild(div);
+}
+
+function autoCalcPoints() {
+  var rows = document.querySelectorAll('.link-row');
+  rows.forEach(function(row) {
+    var type = row.querySelector('[name^="link_type_"]')?.value;
+    var engagement = parseInt(row.querySelector('[name^="link_engagement_"]')?.value) || 0;
+    var pointsInput = row.querySelector('[name^="link_points_"]');
+    if (pointsInput) {
+      if (type === 'video') {
+        pointsInput.value = calcVideoPoints(engagement);
+      } else {
+        pointsInput.value = calcImagePoints(engagement);
+      }
+    }
+  });
+  toast('🧮 积分已自动计算');
+}
+
+function saveSubmission(e, id) {
+  e.preventDefault();
+  var data = Object.fromEntries(new FormData(e.target));
+  
+  // Collect links
+  var links = [];
+  var rows = document.querySelectorAll('.link-row');
+  rows.forEach(function(row, i) {
+    var url = row.querySelector('[name^="link_url_"]')?.value;
+    if (!url) return;
+    var engagement = parseInt(row.querySelector('[name^="link_engagement_"]')?.value) || 0;
+    var type = row.querySelector('[name^="link_type_"]')?.value || 'image';
+    var points = parseInt(row.querySelector('[name^="link_points_"]')?.value) || 0;
+    links.push({url: url, engagement: engagement, type: type, points: points});
+  });
+
+  var imagePoints = links.filter(function(l) { return l.type === 'image'; }).reduce(function(s, l) { return s + l.points; }, 0);
+  var videoPoints = links.filter(function(l) { return l.type === 'video'; }).reduce(function(s, l) { return s + l.points; }, 0);
+  var totalPoints = imagePoints + videoPoints;
+
+  var payload = {
+    creatorId: data.creatorId,
+    month: data.month || selectedMonth,
+    links: links,
+    imagePoints: imagePoints,
+    videoPoints: videoPoints,
+    totalPoints: totalPoints,
+    consistentBonus: parseInt(data.consistentBonus) || 0,
+    rewardStatus: 'pending',
+    rewardType: '',
+    rewardSentDate: ''
+  };
+
+  if (id) {
+    DB.updateSubmission(id, payload);
+    toast('✅ 已更新');
+  } else {
+    payload.id = uid();
+    DB.addSubmission(payload);
+    toast('✅ 已添加');
+  }
+  closeModal();
+  renderMonthly();
+}
+
+function deleteSubmission(id) {
+  if (!confirm('确定删除？')) return;
+  DB.deleteSubmission(id);
+  renderMonthly();
+  toast('已删除');
+}
+
+function batchAddSubmissions() {
+  var creators = DB.getCreators().filter(function(c) { return c.status === 'active'; });
+  var existing = DB.getSubmissionsByMonth(selectedMonth);
+  var existingIds = {};
+  existing.forEach(function(s) { existingIds[s.creatorId] = true; });
+  var available = creators.filter(function(c) { return !existingIds[c.id]; });
+
+  if (available.length === 0) {
+    toast('本月所有创作者都已录入');
+    return;
+  }
+
+  showModal(`
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>📋 批量添加投稿 · ${getMonthLabel(selectedMonth)}</h2>
+    <p class="text-muted mb8">为以下尚未录入的创作者创建本月投稿记录（每行一个创作者）：</p>
+    <form onsubmit="batchSaveSubmissions(event)">
+      ${available.map(function(c) { return '<label style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);cursor:pointer"><input type="checkbox" name="cid" value="' + c.id + '" checked><strong>' + escHtml(c.name) + '</strong> <span class="text-muted">' + c.tier + ' · ' + (c.region||'') + '</span></label>'; }).join('')}
+      <div class="flex mt8">
+        <button type="submit" class="btn btn-primary">✅ 创建投稿</button>
+        <button type="button" class="btn" onclick="closeModal()">取消</button>
+      </div>
+    </form>
+  `);
+}
+
+function batchSaveSubmissions(e) {
+  e.preventDefault();
+  var cids = [];
+  var checkboxes = e.target.querySelectorAll('[name="cid"]:checked');
+  checkboxes.forEach(function(cb) { cids.push(cb.value); });
+  
+  cids.forEach(function(cid) {
+    DB.addSubmission({
+      id: uid(),
+      creatorId: cid,
+      month: selectedMonth,
+      links: [],
+      imagePoints: 0,
+      videoPoints: 0,
+      totalPoints: 0,
+      consistentBonus: 0,
+      rewardStatus: 'pending',
+      rewardType: '',
+      rewardSentDate: ''
+    });
+  });
+  closeModal();
+  renderMonthly();
+  toast('✅ 已为 ' + cids.length + ' 位创作者创建记录');
+}
+
+// ===== REWARDS =====
+function renderRewards() {
+  var subs = DB.getSubmissions();
+  var months = [...new Set(subs.map(function(s) { return s.month; }))].sort().reverse();
+
+  document.getElementById('pageRewards').innerHTML = `
+    <div class="card">
+      <div class="card-title">🎁 奖励发放追踪</div>
+      <div class="month-picker">
+        ${months.length === 0 ? '<span class="text-muted">暂无投稿记录</span>' :
+        months.map(function(m) { return '<button class="btn btn-sm ' + (m === selectedMonth ? 'btn-primary' : '') + '" onclick="selectedMonth=\'' + m + '\';renderRewards()">' + getMonthLabel(m) + '</button>'; }).join('')}
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>创作者</th><th>图片分</th><th>视频分</th><th>总分</th><th>持续创作奖</th><th>合计</th><th>奖励内容</th><th>状态</th><th>操作</th></tr>
+          ${subs.filter(function(s) { return s.month === selectedMonth; }).length === 0 ? '<tr><td colspan="9" class="empty">本月暂无数据</td></tr>' :
+          subs.filter(function(s) { return s.month === selectedMonth; }).map(function(s) {
+            var c = DB.getCreator(s.creatorId);
+            var name = c ? c.name : '(已删除)';
+            var total = (s.totalPoints||0) + (s.consistentBonus||0);
+            return '<tr><td><strong>' + escHtml(name) + '</strong></td><td>' + (s.imagePoints||0) + '</td><td>' + (s.videoPoints||0) + '</td><td>' + (s.totalPoints||0) + '</td><td>' + (s.consistentBonus||0) + '</td><td><strong>' + total + '</strong></td><td>' + escHtml(s.rewardType||'-') + '</td><td><span class="tag ' + (s.rewardStatus === 'sent' ? 'active' : 'inactive') + '">' + (s.rewardStatus === 'sent' ? '✅ 已发放' : '⏳ 待处理') + '</span></td><td><button class="btn btn-sm" onclick="markRewardSent(\'' + s.id + '\')">' + (s.rewardStatus === 'sent' ? '重发' : '标记已发') + '</button></td></tr>';
+          }).join('')}
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function markRewardSent(id) {
+  showModal(`
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>🎁 奖励发放</h2>
+    <form onsubmit="saveReward(event,'${id}')">
+      <div class="form-group"><label>奖励内容</label><input name="rewardType" placeholder="如：450钻石 / Google Play $5 / 周边礼包"></div>
+      <div class="form-group"><label>发放日期</label><input name="rewardSentDate" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+      <div class="flex mt8">
+        <button type="submit" class="btn btn-primary">✅ 确认发放</button>
+        <button type="button" class="btn" onclick="closeModal()">取消</button>
+      </div>
+    </form>
+  `);
+}
+
+function saveReward(e, id) {
+  e.preventDefault();
+  var data = Object.fromEntries(new FormData(e.target));
+  DB.updateSubmission(id, {rewardStatus: 'sent', rewardType: data.rewardType, rewardSentDate: data.rewardSentDate});
+  closeModal();
+  renderRewards();
+  toast('✅ 已标记为已发放');
+}
+
+// ===== TEMPLATES =====
+function renderTemplates() {
+  var templates = DB.getTemplates();
+  document.getElementById('pageTemplates').innerHTML = `
+    <div class="card">
+      <div class="card-title">💬 话术模板 <button class="btn btn-sm" style="margin-left:auto" onclick="addTemplate()">➕ 新增</button></div>
+      ${templates.length === 0 ? '<div class="empty">暂无话术模板</div>' :
+      templates.map(function(t) { return `
+        <div class="template-item">
+          <h4>📌 ${escHtml(t.category)}</h4>
+          <div class="tp-text"><strong>🇨🇳 中文：</strong>${escHtml(t.chinese)}</div>
+          <div class="tp-text"><strong>🇬🇧 English：</strong>${escHtml(t.english)}</div>
+          <div class="flex mt8">
+            <button class="btn btn-sm" onclick="copyTemplate('${t.id}','zh')">📋 复制中文</button>
+            <button class="btn btn-sm" onclick="copyTemplate('${t.id}','en')">📋 复制英文</button>
+            <button class="btn btn-sm" onclick="copyTemplate('${t.id}','both')">📋 复制双语</button>
+            <button class="btn btn-sm" onclick="editTemplate('${t.id}')">✏️ 编辑</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteTemplate('${t.id}')">删除</button>
+          </div>
+        </div>
+      `;}).join('')}
+    </div>
+  `;
+}
+
+function copyTemplate(id, lang) {
+  var t = DB.getTemplates().find(function(x) { return x.id === id; });
+  if (!t) return;
+  var text = lang === 'zh' ? t.chinese : lang === 'en' ? t.english : '【中文】\n' + t.chinese + '\n\n【English】\n' + t.english;
+  navigator.clipboard.writeText(text).then(function() { toast('✅ 已复制'); });
+}
+
+function addTemplate() { showTemplateForm(null); }
+function editTemplate(id) { showTemplateForm(id); }
+
+function showTemplateForm(id) {
+  var t = id ? DB.getTemplates().find(function(x) { return x.id === id; }) : null;
+  showModal(`
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>${t ? '编辑话术' : '新增话术'}</h2>
+    <form onsubmit="saveTemplate(event,'${id||''}')">
+      <div class="form-group"><label>分类</label><input name="category" value="${t?escHtml(t.category):''}" placeholder="如：积分通知、奖励发放..."></div>
+      <div class="form-group"><label>🇨🇳 中文</label><textarea name="chinese" rows="4">${t?escHtml(t.chinese):''}</textarea></div>
+      <div class="form-group"><label>🇬🇧 English</label><textarea name="english" rows="4">${t?escHtml(t.english):''}</textarea></div>
+      <div class="flex mt8">
+        <button type="submit" class="btn btn-primary">💾 保存</button>
+        <button type="button" class="btn" onclick="closeModal()">取消</button>
+      </div>
+    </form>
+  `);
+}
+
+function saveTemplate(e, id) {
+  e.preventDefault();
+  var data = Object.fromEntries(new FormData(e.target));
+  if (id) {
+    var idx = DB.getTemplates().findIndex(function(t) { return t.id === id; });
+    if (idx >= 0) { DB.getTemplates()[idx] = {id: id, category: data.category, chinese: data.chinese, english: data.english}; DB.save(); }
+  } else {
+    DB.getTemplates().push({id: uid(), category: data.category, chinese: data.chinese, english: data.english});
+    DB.save();
+  }
+  closeModal();
+  renderTemplates();
+  toast('✅ 已保存');
+}
+
+function deleteTemplate(id) {
+  if (!confirm('确定删除？')) return;
+  var idx = DB.getTemplates().findIndex(function(t) { return t.id === id; });
+  if (idx >= 0) { DB.getTemplates().splice(idx, 1); DB.save(); }
+  renderTemplates();
+  toast('已删除');
+}
+
+// ===== SETTINGS =====
+function renderSettings() {
+  var s = DB.getSettings();
+  document.getElementById('pageSettings').innerHTML = `
+    <div class="card">
+      <div class="card-title">⚙️ 积分规则设置</div>
+      <form onsubmit="saveSettings(event)">
+        <div class="form-row">
+          <div class="form-group"><label>图文达标互动量</label><input name="imageThreshold" type="number" value="${s.imageThreshold}"></div>
+          <div class="form-group"><label>图文档位1积分</label><input name="imagePoints1" type="number" value="${s.imagePoints1}"></div>
+          <div class="form-group"><label>图文档位2互动量</label><input name="imageThreshold2" type="number" value="${s.imageThreshold2}"></div>
+          <div class="form-group"><label>图文档位2积分</label><input name="imagePoints2" type="number" value="${s.imagePoints2}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>视频达标播放量1</label><input name="videoThreshold1" type="number" value="${s.videoThreshold1}"></div>
+          <div class="form-group"><label>视频档位1积分</label><input name="videoPoints1" type="number" value="${s.videoPoints1}"></div>
+          <div class="form-group"><label>视频达标播放量2</label><input name="videoThreshold2" type="number" value="${s.videoThreshold2}"></div>
+          <div class="form-group"><label>视频档位2积分</label><input name="videoPoints2" type="number" value="${s.videoPoints2}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>月积分上限</label><input name="monthlyCap" type="number" value="${s.monthlyCap}"></div>
+          <div class="form-group"><label>最高统计帖数</label><input name="maxPosts" type="number" value="${s.maxPosts}"></div>
+          <div class="form-group"><label>最低兑换积分</label><input name="redemptionMin" type="number" value="${s.redemptionMin}"></div>
+        </div>
+        <div class="flex">
+          <button type="submit" class="btn btn-primary">💾 保存设置</button>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title">📦 数据管理</div>
+      <div class="flex">
+        <button class="btn" onclick="DB.backupToFile()">⬇️ 导出备份 (JSON)</button>
+        <button class="btn" onclick="document.getElementById('importFile2').click()">📥 导入备份</button>
+        <button class="btn btn-danger" onclick="resetAllData()">⚠️ 重置所有数据</button>
+        <input type="file" id="importFile2" accept=".json" style="display:none" onchange="importData(event)">
+      </div>
+    </div>
+  `;
+}
+
+function saveSettings(e) {
+  e.preventDefault();
+  var data = Object.fromEntries(new FormData(e.target));
+  Object.keys(data).forEach(function(k) { data[k] = parseInt(data[k]) || 0; });
+  DB._data.settings = data;
+  DB.save();
+  toast('✅ 设置已保存');
+}
+
+function importData(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      if (DB.importAll(ev.target.result)) {
+        toast('✅ 导入成功！');
+        var active = document.querySelector('.nav-tab.active');
+        if (active) renderPage(active.dataset.tab);
+        else renderDashboard();
+      } else {
+        toast('❌ 数据格式错误');
+      }
+    } catch(err) {
+      toast('❌ 导入失败: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function resetAllData() {
+  if (!confirm('⚠️ 确定要重置所有数据吗？此操作不可撤销！')) return;
+  if (!confirm('再次确认：所有创作者、投稿记录都将被清除！')) return;
+  localStorage.removeItem('koc_data');
+  DB.init();
+  toast('已重置');
+  var active = document.querySelector('.nav-tab.active');
+  if (active) renderPage(active.dataset.tab);
+}
+
+// ===== INIT =====
+DB.init();
+renderDashboard();
+</script>
+</body>
+</html>
