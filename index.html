@@ -5,61 +5,125 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yoyo Creative Studio — KOC FAQ</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#fff5f8;--surface:#ffffff;--surface2:#ffeef3;--border:#ffc0cb;--border-light:#ffd6e0;--text:#5c3d4e;--text-dim:#b07f8e;--text-muted:#d4a0b2;--accent:#ff69b4;--green:#ff8fab;--orange:#ffb347;--pink:#ff1493;--purple:#c77dff;--blue:#b0d4ff;--shadow:0 2px 12px rgba(255,105,180,0.08)}
-body{font-family:'Comic Sans MS','Chalkboard SE','Segoe UI',cursive,sans-serif;background:var(--bg);color:var(--text);line-height:1.8;background-image:radial-gradient(circle at 20% 50%, #ffe4ec 0%, #fff5f8 100%)}
-.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,#ffb6c1,rgba(255,182,193,0.92));border-bottom:2px solid var(--pink);padding:14px 20px;text-align:center;box-shadow:0 2px 16px rgba(255,105,180,0.15)}
-.header h1{font-size:15px;font-weight:700;color:#fff;text-shadow:1px 1px 0 #ff69b4;letter-spacing:.5px}
-.header .sub{font-size:10px;color:#fff0fa;margin-top:3px;opacity:.9}
-.container{max-width:800px;margin:0 auto;padding:20px}
-.section{margin-bottom:24px;position:relative}
-.section-title{font-size:13px;font-weight:700;color:var(--accent);padding:8px 14px;background:var(--surface2);border-radius:12px;margin-bottom:12px;border:1.5px solid var(--border);display:inline-block;box-shadow:0 2px 8px rgba(255,105,180,0.06)}
-.section-title::before{content:'\u2b50 \ufe0f '}
-.q-item{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:12px 16px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow);transition:all .2s}
-.q-item:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,105,180,0.12);border-color:var(--accent)}
-.q{font-weight:700;font-size:13px;margin-bottom:4px;color:var(--text)}
-.q::before{content:'\ud83d\udc8c '}
-.a{font-size:12px;color:var(--text-dim);line-height:1.8}
-.a p{margin:4px 0}
-.a .tag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:999px;margin-right:4px;vertical-align:middle;font-weight:600}
-.tag.source{background:rgba(255,105,180,0.08);color:var(--accent);border:1px solid rgba(255,105,180,0.15)}
-.tag.warn{background:rgba(255,179,71,0.1);color:var(--orange);border:1px solid rgba(255,179,71,0.15)}
-.tag.new{background:rgba(255,143,171,0.1);color:var(--green);border:1px solid rgba(255,143,171,0.2)}
-.tag.correction{background:rgba(255,20,147,0.06);color:var(--pink);border:1px solid rgba(255,20,147,0.12)}
-.a table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px;border-radius:10px;overflow:hidden}
-.a td,.a th{border:1px solid var(--border);padding:5px 10px;text-align:left}
-.a th{background:var(--surface2);color:var(--text);font-weight:600}
-.a ul,.a ol{padding-left:18px;margin:4px 0}
-.a li{margin:3px 0}
-.a li::marker{color:var(--accent)}
-.a strong{color:var(--text)}
-hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
-.flow-box{background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:11px;line-height:2;margin-top:12px;font-family:'Comic Sans MS',cursive,sans-serif;box-shadow:0 2px 8px var(--shadow)}
-.footer{text-align:center;font-size:10px;color:var(--text-muted);padding:20px;border-top:2px dashed var(--border);margin-top:20px}
-.footer b{color:var(--accent)}
-@media(max-width:600px){.container{padding:12px}.q-item{padding:10px}}
-/* ===== Search & Autocomplete ===== */
-.search-wrap{position:relative;margin-bottom:14px}
-.search-wrap input{width:100%;padding:9px 34px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:999px;color:var(--text);font-size:13px;outline:none;transition:all .2s;text-align:center;font-family:'Comic Sans MS',cursive,sans-serif}
-.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,105,180,0.1)}
-.search-wrap input::placeholder{color:var(--text-muted);text-align:center}
-.search-wrap .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.5;pointer-events:none}
-.search-wrap .clear-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;display:none;padding:2px 6px;line-height:1}
-.search-wrap .clear-btn:hover{color:var(--accent)}
-.search-suggest{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;max-height:240px;overflow-y:auto;display:none;z-index:99;box-shadow:0 8px 24px rgba(255,105,180,0.12);margin-top:4px}
-.search-suggest .s-item{padding:8px 14px;font-size:12px;cursor:pointer;border-bottom:1px solid rgba(255,192,203,0.2);color:var(--text-dim);display:flex;align-items:center;gap:6px}
+:root{
+  --bg:#1A1023;--panel:#251733;--card-bg:#2E1D40;
+  --ink:#F6EDF7;--ink-dim:#B79FC4;
+  --pink:#FF6FA5;--gold:#FFC94A;--purple:#B57BFF;--blue:#5FB8FF;--mint:#4ADEC0;
+  --disp:'Baloo 2','Noto Sans SC',sans-serif;
+  --body:'Noto Sans SC',sans-serif;
+  --mono:'Space Mono',monospace;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.8;
+  background-image:radial-gradient(circle at 20% 10%,rgba(255,111,165,.08) 0,transparent 35%),
+                   radial-gradient(circle at 80% 80%,rgba(181,123,255,.08) 0,transparent 40%);}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+.stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.35;
+  animation:tw 3s infinite alternate}
+@keyframes tw{from{opacity:.12}to{opacity:.55}}
+/* header */
+.header{position:sticky;top:0;z-index:40;background:rgba(26,16,35,.88);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.08);padding:14px 20px;text-align:center}
+.header h1{font-family:var(--disp);font-weight:800;font-size:16px;
+  background:linear-gradient(100deg,#FFC94A,#FF6FA5 55%,#B57BFF);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.header .sub{font-family:var(--mono);font-size:10px;color:var(--ink-dim);margin-top:3px;letter-spacing:.08em}
+.container{max-width:800px;margin:0 auto;padding:20px;position:relative;z-index:1}
+/* search */
+.search-wrap{position:relative;margin-bottom:16px}
+.search-wrap input{width:100%;padding:10px 36px;background:var(--panel);border:1px solid rgba(255,255,255,.1);
+  border-radius:999px;color:var(--ink);font-size:13px;outline:none;font-family:var(--body);text-align:center;
+  transition:all .25s}
+.search-wrap input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,111,165,.08)}
+.search-wrap input::placeholder{color:var(--ink-dim);text-align:center}
+.search-wrap .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;opacity:.45}
+.search-wrap .clear-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;
+  border:none;color:var(--ink-dim);font-size:16px;cursor:pointer;display:none}
+.search-wrap .clear-btn:hover{color:var(--pink)}
+.search-suggest{position:absolute;top:100%;left:0;right:0;background:var(--panel);
+  border:1px solid rgba(255,255,255,.08);border-radius:12px;max-height:240px;overflow-y:auto;display:none;
+  z-index:99;box-shadow:0 8px 32px rgba(0,0,0,.4);margin-top:4px}
+.search-suggest .s-item{padding:9px 14px;font-size:12px;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.04);color:var(--ink-dim);display:flex;align-items:center;gap:6px}
 .search-suggest .s-item:last-child{border-bottom:none}
-.search-suggest .s-item:hover{background:var(--surface2);color:var(--text)}
-.search-suggest .s-item .s-badge{font-size:9px;background:rgba(255,105,180,0.08);color:var(--accent);padding:2px 8px;border-radius:999px;white-space:nowrap;border:1px solid rgba(255,105,180,0.12)}
-.search-suggest .s-item .s-match{color:var(--accent);font-weight:700}
-.search-suggest .s-empty{padding:14px;font-size:12px;color:var(--text-muted);text-align:center}
+.search-suggest .s-item:hover{background:rgba(255,255,255,.04);color:var(--ink)}
+.search-suggest .s-item .s-badge{font-size:8px;font-family:var(--mono);background:rgba(255,111,165,.12);
+  color:var(--pink);padding:2px 8px;border-radius:999px;white-space:nowrap;font-weight:700;letter-spacing:.05em}
+.search-suggest .s-item .s-match{color:var(--gold);font-weight:700}
+.search-suggest .s-empty{padding:14px;font-size:12px;color:var(--ink-dim);text-align:center;opacity:.5}
 .q-item.hide{display:none!important}
 .section.hide{display:none!important}
-.search-count{font-size:11px;color:var(--text-muted);margin:0 0 10px;display:none;text-align:center}
+.search-count{font-family:var(--mono);font-size:10px;color:var(--ink-dim);margin:0 0 12px;display:none;
+  text-align:center;letter-spacing:.05em;opacity:.7}
+/* section */
+.section{margin-bottom:28px;position:relative}
+.section-title{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-weight:700;
+  font-size:13px;padding:6px 16px;border-radius:999px;
+  background:linear-gradient(135deg,rgba(255,111,165,.12),rgba(181,123,255,.08));
+  border:1px solid rgba(255,111,165,.2);color:var(--pink);margin-bottom:14px}
+/* rarity tags for section titles */
+.stag{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.12em;
+  padding:2px 8px;border-radius:999px;margin-right:2px;vertical-align:middle}
+.stag.ssr{background:var(--gold);color:#3A2600}
+.stag.sr{background:var(--purple);color:#20073F}
+.stag.r{background:var(--blue);color:#032A47}
+/* q&a cards */
+.q-item{background:var(--card-bg);border:1px solid rgba(255,255,255,.06);border-radius:12px;
+  padding:12px 16px;margin-bottom:10px;transition:all .2s;position:relative;overflow:hidden}
+.q-item:hover{border-color:rgba(255,111,165,.2);transform:translateY(-1px);
+  box-shadow:0 4px 20px rgba(255,111,165,.06)}
+.q-item.rarity-ssr{border-left:3px solid var(--gold);background:linear-gradient(135deg,rgba(255,201,74,.04),var(--card-bg))}
+.q-item.rarity-sr{border-left:3px solid var(--purple);background:linear-gradient(135deg,rgba(181,123,255,.04),var(--card-bg))}
+.q-item.rarity-r{border-left:3px solid var(--blue)}
+.q{font-weight:700;font-size:13px;margin-bottom:5px;color:var(--ink);font-family:var(--body)}
+.q .q-num{font-family:var(--mono);font-size:9px;color:var(--ink-dim);margin-right:4px;font-weight:400}
+.a{font-size:12px;color:var(--ink-dim);line-height:1.9}
+.a p{margin:4px 0}
+.a .tag{display:inline-block;font-family:var(--mono);font-size:8px;padding:2px 9px;border-radius:999px;
+  margin-right:4px;vertical-align:middle;font-weight:700;letter-spacing:.05em;border:1px solid transparent}
+.tag.source{background:rgba(255,111,165,.08);color:var(--pink);border-color:rgba(255,111,165,.15)}
+.tag.warn{background:rgba(255,201,74,.08);color:var(--gold);border-color:rgba(255,201,74,.15)}
+.tag.new{background:rgba(75,222,192,.08);color:var(--mint);border-color:rgba(75,222,192,.15)}
+.tag.correction{background:rgba(181,123,255,.08);color:var(--purple);border-color:rgba(181,123,255,.15)}
+/* rarity badge on cards */
+.rarity-badge{position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:8px;font-weight:700;
+  letter-spacing:.12em;padding:2px 8px;border-radius:999px}
+.rarity-badge.ssr{background:linear-gradient(135deg,rgba(255,201,74,.2),rgba(255,143,83,.1));color:var(--gold);
+  border:1px solid rgba(255,201,74,.2)}
+.rarity-badge.sr{background:linear-gradient(135deg,rgba(181,123,255,.15),rgba(95,184,255,.1));color:var(--purple);
+  border:1px solid rgba(181,123,255,.15)}
+.rarity-badge.r{background:linear-gradient(135deg,rgba(95,184,255,.12),rgba(75,222,192,.06));color:var(--blue);
+  border:1px solid rgba(95,184,255,.12)}
+/* tables */
+.a table{width:100%;border-collapse:separate;border-spacing:0;margin:8px 0;font-size:11px;border-radius:10px;overflow:hidden}
+.a td,.a th{padding:6px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.04)}
+.a th{background:rgba(255,255,255,.04);color:var(--ink);font-weight:700;font-family:var(--body);font-size:11px}
+.a tr:last-child td{border-bottom:none}
+.a ul,.a ol{padding-left:20px;margin:6px 0}
+.a li{margin:3px 0}
+.a li::marker{color:var(--pink)}
+.a strong{color:var(--ink)}.a code{background:rgba(255,255,255,.06);padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--gold)}
+hr{border:none;border-top:1px solid rgba(255,255,255,.06);margin:24px 0}
+.flow-box{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:12px;
+  padding:14px 16px;font-size:11.5px;line-height:2.1;margin-top:12px;font-family:var(--body)}
+.flow-box b{color:var(--pink)}
+.footer{text-align:center;font-family:var(--mono);font-size:9.5px;color:rgba(255,255,255,.25);
+  padding:24px;border-top:1px solid rgba(255,255,255,.04);margin-top:24px;letter-spacing:.05em}
+.footer b{color:var(--pink);font-weight:700}
+/* data source banner */
+.data-banner{background:var(--panel);border:1px solid rgba(255,201,74,.15);border-radius:12px;
+  padding:12px 16px;margin-bottom:20px;font-size:11px;color:var(--ink-dim);line-height:1.9}
+.data-banner strong{color:var(--gold)}
+@media(max-width:600px){.container{padding:12px}.q-item{padding:12px}}
 </style>
 </head>
 <body>
+<div class="stars" id="stars"></div>
+<script>
+(function(){var s=document.getElementById("stars");for(var i=0;i<40;i++){var d=document.createElement("i");d.style.left=Math.random()*100+"%";d.style.top=Math.random()*100+"%";d.style.animationDelay=Math.random()*3+"s";s.appendChild(d)}})();
+</script>
+
 
 <div class="header">
   <h1>🎨 Yoyo Creative Studio — KOC 常见问题 FAQ</h1>
@@ -76,7 +140,7 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="search-count" id="searchCount"></div>
 
 
-<div class="q-item" style="background:var(--surface2);border-left:3px solid var(--orange)">
+<div class="q-item rarity-r rarity-r" class="q-item rarity-r"><span class="rarity-badge r">R</span>
   <div class="a" style="color:var(--text-dim);font-size:11px">
     <strong>📌 数据来源说明：</strong> v1 版仅基于 🎨 #creators-exchange 频道的玩家对话整理。<br>
     <strong>v2 版交叉验证了以下官方信息源：</strong><br>
@@ -88,21 +152,21 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">📌 一、入门与加入</div>
 
-  <div class="q-item">
-    <div class="q">Q1：Yoyo Creative Studio 是什么？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q1</span>：Yoyo Creative Studio 是什么？</div>
     <div class="a">
       <p>我们是欧美休闲游戏 <strong>My Leisure Time</strong> 的官方 KOC 创作者社群。通过创作 UGC 内容（图文/视频）推广游戏，获得奖励和游戏福利。</p>
       <p><span class="tag source">#reward-rules Q1</span></p>
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q2：谁能参加？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q2</span>：谁能参加？</div>
     <div class="a"><p>任何喜欢 My Leisure Time 的玩家都可以申请。目前主要面向欧美地区用户。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q3：怎么加入？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q3</span>：怎么加入？</div>
     <div class="a">
       <ol>
         <li>加入 Discord → 在 #welcome 阅读规则</li>
@@ -114,8 +178,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q4：有最低产出要求吗？没达到会被踢吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q4</span>：有最低产出要求吗？没达到会被踢吗？</div>
     <div class="a">
       <p>没有强制"踢出"机制。但<strong>连续 2 周无产出</strong>可能会被移除 KOC 角色。目前没有每月最低积分硬门槛。</p>
       <p><span class="tag source">#reward-rules Q4</span></p>
@@ -127,8 +191,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">📝 二、内容创作要求</div>
 
-  <div class="q-item">
-    <div class="q">Q5：要做什么类型的内容？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q5</span>：要做什么类型的内容？</div>
     <div class="a">
       <table>
         <tr><th>平台</th><th>形式</th><th>要求</th></tr>
@@ -142,8 +206,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q6：内容有什么要求？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q6</span>：内容有什么要求？</div>
     <div class="a">
       <ul>
         <li>✅ 原创（不能搬运/抄袭）</li>
@@ -158,8 +222,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q7：一个作品可以发多个平台吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q7</span>：一个作品可以发多个平台吗？</div>
     <div class="a">
       <p><strong>可以，且每个平台都算独立作品。</strong> 同一平台重复发同一条内容 → 只计表现最好的一次。</p>
       <p><span class="tag new">2026年7月新规则</span> 跨平台同内容 = 独立计分（此前旧规则曾规定"只算最佳平台"）。</p>
@@ -167,8 +231,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q8：我可以宣传自己的 Instagram 账号吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q8</span>：我可以宣传自己的 Instagram 账号吗？</div>
     <div class="a"><p>可以在社群内分享，但建议以 MLT 游戏内容为主。</p></div>
   </div>
 </div>
@@ -177,20 +241,20 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">📮 三、提交与审核</div>
 
-  <div class="q-item">
-    <div class="q">Q9：内容发布后要做什么？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q9</span>：内容发布后要做什么？</div>
     <div class="a">
       <p>把链接发到 <strong>#🎨｜creators-exchange</strong> 频道，格式：<code>平台 | 链接 | 作品类型</code></p>
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q10：审核要多久？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q10</span>：审核要多久？</div>
     <div class="a"><p>通常在 24-48 小时内。高峰期可能延长到一周。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q11：审核不通过的原因？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q11</span>：审核不通过的原因？</div>
     <div class="a">
       <ul>
         <li>❌ 链接打不开（隐私设置问题）</li>
@@ -202,8 +266,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q12：我编辑/修改了已发布的内容，需要重新提交吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q12</span>：我编辑/修改了已发布的内容，需要重新提交吗？</div>
     <div class="a"><p>建议<strong>重新发布新帖</strong>而不是编辑旧帖。编辑过的帖子可能被 Discord 审核系统忽略。</p></div>
   </div>
 </div>
@@ -212,8 +276,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">💰 四、奖励与结算</div>
 
-  <div class="q-item">
-    <div class="q">Q13：积分（Points）怎么算？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q13</span>：积分（Points）怎么算？</div>
     <div class="a">
       <p><strong>2026年7月新规则：</strong></p>
       <table>
@@ -228,21 +292,21 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q14：一个月多少积分算正常？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q14</span>：一个月多少积分算正常？</div>
     <div class="a"><p>月度上限为 <strong>40 分</strong>。达到上限后不再累积，下月重置。具体平均分因人而异。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q15：积分上限是多少？推荐奖励计入吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q15</span>：积分上限是多少？推荐奖励计入吗？</div>
     <div class="a">
       <p><strong>每月最高 40 分，月初重置。</strong></p>
       <p><span class="tag new">推荐积分是额外的</span> — 不计入每月 40 分上限。</p>
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q16：奖励有哪些？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q16</span>：奖励有哪些？</div>
     <div class="a">
       <table>
         <tr><th>选项</th><th>说明</th></tr>
@@ -255,18 +319,18 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q17：一个月可以兑换多次吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q17</span>：一个月可以兑换多次吗？</div>
     <div class="a"><p>一个月只能兑换一次。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q18：没用完的积分下月还在吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q18</span>：没用完的积分下月还在吗？</div>
     <div class="a"><p><strong>在的。</strong> 积分按月累积，兑换后剩余积分保留，不重置。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q19：什么时候结算？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q19</span>：什么时候结算？</div>
     <div class="a">
       <ul>
         <li>提交截止：每月最后一周周五</li>
@@ -277,8 +341,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q20：最低多少积分能兑换？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q20</span>：最低多少积分能兑换？</div>
     <div class="a"><p>最低 <strong>2 分</strong> 起兑。</p></div>
   </div>
 </div>
@@ -287,8 +351,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">🏆 五、连续创作奖励</div>
 
-  <div class="q-item" style="border-left:3px solid var(--orange)">
-    <div class="q">Q21：连续 5 天发布奖励</div>
+  <div class="q-item rarity-r rarity-r" style="border-left:3px solid var(--orange)"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q21</span>：连续 5 天发布奖励</div>
     <div class="a">
       <ul>
         <li>需要在同一个月内 <strong>连续 5 天</strong> 各发布至少 1 条内容</li>
@@ -301,8 +365,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q22：连续创作奖（15 条/月）</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q22</span>：连续创作奖（15 条/月）</div>
     <div class="a">
       <ul>
         <li>所有类型的创作内容都合格</li>
@@ -318,18 +382,18 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">🔗 六、链接与发布</div>
 
-  <div class="q-item">
-    <div class="q">Q23：帖子必须发在个人主页吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q23</span>：帖子必须发在个人主页吗？</div>
     <div class="a"><p>Facebook 个人主页或群组（如 My Leisure Time Global 群组），<strong>两者都算数</strong>。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q24：分享链接打不开怎么办？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q24</span>：分享链接打不开怎么办？</div>
     <div class="a"><p>检查账号是否公开 → 重新复制链接 → 内容被删除则重新发布</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q25：同一个内容重复发布怎么算？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q25</span>：同一个内容重复发布怎么算？</div>
     <div class="a">
       <p>同一平台重发 → 只计表现最好的一次。不同平台 → 各算各的（2026年7月新规则）。</p>
       <p><span class="tag source">#yoyo-rules-faq Q3</span></p>
@@ -341,13 +405,13 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">🆕 七、Reddit（2026年7月新增）</div>
 
-  <div class="q-item">
-    <div class="q">Q26：Reddit 现在也算吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q26</span>：Reddit 现在也算吗？</div>
     <div class="a"><p>是的，7 月起 Reddit 帖子计入积分。目前仅统计 7 月及之后的发帖。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q27：在 Reddit 发什么内容？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q27</span>：在 Reddit 发什么内容？</div>
     <div class="a"><p>分享 MLT 游戏内容、设计展示、游戏体验等。需发布在公开社区。</p></div>
   </div>
 </div>
@@ -356,15 +420,15 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">🎁 八、推荐奖励</div>
 
-  <div class="q-item">
-    <div class="q">Q28：推荐朋友加入有奖励吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q28</span>：推荐朋友加入有奖励吗？</div>
     <div class="a">
       <p>✅ 成功推荐朋友成为 KOC 后可获得额外积分。推荐积分<strong>不计入每月 40 分上限</strong>。</p>
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q29：2026年7月新增了哪些创作者计划？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q29</span>：2026年7月新增了哪些创作者计划？</div>
     <div class="a">
       <ul>
         <li>🎀 Refer-a-Friend 推荐计划</li>
@@ -380,8 +444,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">📋 九、社群规则</div>
 
-  <div class="q-item">
-    <div class="q">Q30：Discord 里可以发什么？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q30</span>：Discord 里可以发什么？</div>
     <div class="a">
       <ul>
         <li>✅ 作品分享 · 创作交流 · 游戏讨论</li>
@@ -391,8 +455,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q31：有问题找谁？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q31</span>：有问题找谁？</div>
     <div class="a">
       <p>内容审核 → #creators-exchange · 奖励结算 → DM 管理员</p>
     </div>
@@ -403,8 +467,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">❓ 十、其他</div>
 
-  <div class="q-item" style="border-left:3px solid var(--orange)">
-    <div class="q">Q32：我以前发的帖子算吗？</div>
+  <div class="q-item rarity-r rarity-r" style="border-left:3px solid var(--orange)"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q32</span>：我以前发的帖子算吗？</div>
     <div class="a">
       <p><strong>如果当月的结算日前加入并提交了链接，该月的内容也算。</strong></p>
       <p>示例：7 月加入，6 月内容也有效，只要在 <strong>7月10日前</strong> 提交 Google Form。</p>
@@ -413,23 +477,23 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q33：新手有没有额外奖励？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q33</span>：新手有没有额外奖励？</div>
     <div class="a"><p>有。New Creator Event 新手活动，首月可能有额外积分。具体见最新公告。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q34：Canva 导出图片不清晰怎么办？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q34</span>：Canva 导出图片不清晰怎么办？</div>
     <div class="a"><p>导出选最高画质。避免使用 Canva 的 AI 功能（会被标记）。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q35：怎么录游戏视频和截图？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q35</span>：怎么录游戏视频和截图？</div>
     <div class="a"><p>使用手机自带录屏，手动编辑（推荐 ibisPaint 等）。避免完全依赖 AI 增强工具。</p></div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q36：2026年7月新激励规则概要</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q36</span>：2026年7月新激励规则概要</div>
     <div class="a">
       <ul>
         <li>🎥 视频门槛降低 — TikTok/YouTube 200/400 views 即可有积分</li>
@@ -445,7 +509,7 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 
 <!-- 客服流程 -->
 <div class="section">
-  <div class="section-title">🤖 客服自助排查流程</div>
+  <div class="section-title"><span class="stag ssr">SSR</span> 🤖 客服自助排查流程</div>
   <div class="flow-box">
 收到 KOC 提问 →<br>
 ├── 入门类（Q1-Q4）→ 直接回复<br>
@@ -465,8 +529,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
 <div class="section">
   <div class="section-title">💬 十一、客服常见私信问题</div>
 
-  <div class="q-item">
-    <div class="q">Q37：Hashtag 是强制要求的吗？Reddit 需要加 hashtag 吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q37</span>：Hashtag 是强制要求的吗？Reddit 需要加 hashtag 吗？</div>
     <div class="a">
       <p>创作灵感文档中列出的 hashtag 只是建议，使用它们有助于内容获得更多曝光。</p>
       <p>✅ Facebook 官方群组发的帖子 <strong>需要</strong> 加官方 hashtag <strong>#myleisuretime</strong></p>
@@ -475,8 +539,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q38：视频内容只能发在 TikTok 吗？Instagram Reels 算吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q38</span>：视频内容只能发在 TikTok 吗？Instagram Reels 算吗？</div>
     <div class="a">
       <p>视频 <strong>不包括</strong> Instagram Reels。如果你想提交视频内容，请发到 <strong>TikTok 或 YouTube</strong> 上。</p>
       <p>在 TikTok 和 YouTube 上积累播放量比在 Instagram 上积累互动量更容易获得积分。</p>
@@ -484,8 +548,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q39：同一个作品可以发多个平台吗？怎么算？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q39</span>：同一个作品可以发多个平台吗？怎么算？</div>
     <div class="a">
       <p>✅ <strong>可以。</strong> 一份原创内容分发到不同平台，每个平台都算独立提交。</p>
       <p>一个作品在不同平台发布算 <strong>两次提交</strong>，不管是图文还是视频。</p>
@@ -493,8 +557,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q40：积分可以攒着不兑换吗？会过期吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q40</span>：积分可以攒着不兑换吗？会过期吗？</div>
     <div class="a">
       <p>✅ <strong>可以。</strong> 积分可以一直累积，<strong>没有过期时间</strong>。</p>
       <p>兑换部分积分后，剩余积分会保留在账户里。你想攒多久都行。</p>
@@ -502,8 +566,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q41：TikTok 和 Instagram 的积分计算方式一样吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q41</span>：TikTok 和 Instagram 的积分计算方式一样吗？</div>
     <div class="a">
       <p><strong>不一样。</strong> 平台按不同指标计算积分：</p>
       <table>
@@ -518,8 +582,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q42：连续创作奖励需要每条都达到 40 互动吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q42</span>：连续创作奖励需要每条都达到 40 互动吗？</div>
     <div class="a">
       <p><strong>不需要。</strong> 连续创作奖励（15条/月）只要求提交 15 条合格内容。</p>
       <p>单条内容 <strong>不需要</strong> 达到 40 互动门槛也能计入连续创作奖励。6 月的连续创作奖同样适用此规则。</p>
@@ -527,8 +591,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q43：长期没发内容会被踢吗？还能恢复吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q43</span>：长期没发内容会被踢吗？还能恢复吗？</div>
     <div class="a">
       <p>没有强制踢出机制。如果太久没发内容可以联系管理员恢复。</p>
       <p>每月 28 号会在 📢｜yoyo-bulletin-board 频道发布 <strong>Google Form</strong>，填写所有内容链接即可重新参与。</p>
@@ -536,8 +600,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q44：奖品配送需要提供什么信息？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q44</span>：奖品配送需要提供什么信息？</div>
     <div class="a">
       <p>需要提供以下完整信息（我们从中国发货，清关需要）：</p>
       <ul>
@@ -552,8 +616,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q45：游戏奖励发到哪个服务器？有什么区别？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q45</span>：游戏奖励发到哪个服务器？有什么区别？</div>
     <div class="a">
       <p>有两个服务器可选，请选一个：</p>
       <table>
@@ -566,8 +630,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q46：Google Play 礼品卡可以买月卡吗？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q46</span>：Google Play 礼品卡可以买月卡吗？</div>
     <div class="a">
       <p><strong>不可以。</strong> Google Play 礼品卡是充值到 Google 账户钱包的预付卡，是 Google 平台的通用支付方式。</p>
       <p>它 <strong>不能</strong> 用于购买游戏的月卡会员。月卡需要使用其他支付方式。</p>
@@ -575,8 +639,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q47："40 互动"的标准是总互动还是单条互动？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q47</span>："40 互动"的标准是总互动还是单条互动？</div>
     <div class="a">
       <p>是 <strong>单条帖子</strong> 达到 40 互动量就得 1 分。</p>
       <p>⚠️ 之前翻译工具翻译错误，造成了误解。正确规则：</p>
@@ -589,8 +653,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q48：新手加入有什么额外奖励？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q48</span>：新手加入有什么额外奖励？</div>
     <div class="a">
       <ul>
         <li>🎉 7 月新手活动（New Creator Event）：总积分达到 5 分额外加 <strong>2 分</strong></li>
@@ -602,8 +666,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q49：我之前发的帖子算吗（加入前发的）？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q49</span>：我之前发的帖子算吗（加入前发的）？</div>
     <div class="a">
       <p><strong>算。</strong> 当月结算日前加入并提交了链接，该月的内容也算。</p>
       <p><strong>示例：</strong> 7 月加入，6 月内容也有效，只要在 <strong>7 月 10 日前</strong> 提交 Google Form。</p>
@@ -611,8 +675,8 @@ hr{border:none;border-top:2px dashed var(--border);margin:20px 0}
     </div>
   </div>
 
-  <div class="q-item">
-    <div class="q">Q50：提交链接时为什么要复制链接？Google Form 怎么填？</div>
+  <div class="q-item rarity-r rarity-r"><span class="rarity-badge r">R</span>
+    <div class="q"><span class="q-num">Q50</span>：提交链接时为什么要复制链接？Google Form 怎么填？</div>
     <div class="a">
       <p>没有要求必须复制链接到 Discord。你只需要在 Google Form 里填上所有视频/帖子链接即可。</p>
       <p>如果表单中有非必填项，可以跳过。但建议多发视频，门槛低容易得积分。</p>
